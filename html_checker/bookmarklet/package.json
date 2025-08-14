@@ -1,0 +1,22 @@
+{
+  "name": "html-checker",
+  "version": "1.0.0",
+  "description": "HTML Checker Bookmarklet - SEO・アクセシビリティの課題を検知",
+  "main": "compress.js",
+  "scripts": {
+    "compress": "node compress.js",
+    "build": "npm run compress"
+  },
+  "keywords": [
+    "html",
+    "seo",
+    "accessibility",
+    "bookmarklet",
+    "checker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

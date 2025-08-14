@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事構造検知テストページ</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.6; 
+            margin: 20px;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+        }
+        /* 記事風のスタイル */
+        .news-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .article-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .article-date {
+            color: #666;
+            font-size: 14px;
+        }
+        .article-content {
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        /* サイドバー風 */
+        .sidebar {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>記事構造検知調整テスト</h1>
+        
+        <div class="test-section">
+            <h3>1. 検知すべき記事構造（強い証拠あり）</h3>
+            
+            <!-- これは検知されるべき -->
+            <div class="news-item">
+                <div class="article-date">2024年12月15日</div>
+                <div class="article-title">年末年始営業時間のお知らせ</div>
+                <div class="article-content">
+                    年末年始の営業時間についてご案内いたします。
+                    12月29日から1月3日まで休業とさせていただきます。
+                    ご不便をおかけいたしますが、何卒よろしくお願い申し上げます。
+                    休業期間中のお問い合わせについては、1月4日以降に順次対応させていただきます。
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. 検知しないでほしい要素（証拠不十分）</h3>
+            
+            <!-- これは検知されないでほしい -->
+            <div class="sidebar">
+                <div class="date">2024/12/15</div>
+                <div class="title">関連リンク</div>
+            </div>
+            
+            <!-- これも検知されないでほしい -->
+            <div>
+                <span class="date">12月15日</span>
+                <span>¥4,400（税込）</span>
+            </div>
+            
+            <!-- これも検知されないでほしい（短すぎる）-->
+            <div class="news-item">
+                <div class="title">短い</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. 境界ケース</h3>
+            
+            <!-- これは微妙（日付とタイトルはあるが内容が短い）-->
+            <div class="news-item">
+                <div class="date">2024年12月15日</div>
+                <div class="title">メンテナンスのお知らせ</div>
+                <div class="content">システムメンテナンスを実施します。</div>
+            </div>
+            
+            <!-- これは検知されるべき（十分な内容）-->
+            <div class="post">
+                <div class="headline">新商品のご紹介</div>
+                <div class="publish">2024年12月10日公開</div>
+                <div class="body">
+                    この度、新しい商品ラインナップを追加いたしました。
+                    従来の商品と比較して、より使いやすく、機能性に優れた設計となっております。
+                    詳細につきましては、カタログをご覧いただくか、お気軽にお問い合わせください。
+                    価格や仕様についてもご質問にお答えいたします。
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. 除外されるべき要素</h3>
+            
+            <!-- ナビゲーション内（除外されるべき）-->
+            <nav>
+                <div class="news-item">
+                    <div class="date">2024/12/15</div>
+                    <div class="title">ナビメニュー</div>
+                </div>
+            </nav>
+            
+            <!-- 既存article内（除外されるべき）-->
+            <article>
+                <div class="news-item">
+                    <div class="date">2024/12/15</div>
+                    <div class="title">記事内の要素</div>
+                </div>
+            </article>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #e9ecef; border-radius: 5px;">
+        <h3>調整後の期待される検知結果</h3>
+        <ul>
+            <li><strong>検知される</strong>: 1番目の年末年始お知らせ（クラス+日付+内容+十分な文字数）</li>
+            <li><strong>検知される</strong>: 3番目の新商品紹介（タイトル+日付+内容+長文）</li>
+            <li><strong>検知されない</strong>: サイドバー、金額表示、短い内容、ナビ内、article内</li>
+        </ul>
+        
+        <h4>調整内容</h4>
+        <ul>
+            <li>閾値: 0.8 → 1.0 に厳格化</li>
+            <li>重み調整: より厳しい条件設定</li>
+            <li>除外条件追加: ナビ、サイドバー、金額情報</li>
+            <li>強い証拠要求: 複数条件の組み合わせを必須化</li>
+        </ul>
+    </div>
+</body>
+</html>
