@@ -1,0 +1,21 @@
+{
+  "name": "html-semantic-checker",
+  "version": "1.0.0",
+  "description": "HTML Semantic Checker Chrome Extension",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "clean": "rm -rf dist && rm -f content-script.js",
+    "deploy": "npm run build && cp dist/content-script.js ./content-script.js"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "webpack": "^5.101.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "babel-loader": "^10.0.0"
+  }
+}
