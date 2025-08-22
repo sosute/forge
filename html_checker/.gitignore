@@ -1,3 +1,7 @@
+# Claude Code and Serena specific directories
+.claude/
+.serena/
+
 # Dependencies
 node_modules/
 npm-debug.log*
@@ -13,7 +17,7 @@ dist/
 .temp/
 *.log
 
-# IDE
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
@@ -50,7 +54,3 @@ backup/
 *.crx
 *.pem
 *.zip
-
-# Serena/Claude specific
-.serena/
-.claude/
