@@ -52,5 +52,5 @@ backup/
 *.zip
 
 # Serena/Claude specific
-.serena/cache/
+.serena/
 .claude/
