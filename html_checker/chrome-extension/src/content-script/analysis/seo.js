@@ -66,6 +66,20 @@ export function detectSEOIssues() {
 function checkMetaElements() {
   const issues = [];
 
+  // titleタグの重複チェック
+  const titleTags = document.querySelectorAll('title');
+  if (titleTags.length > 1) {
+    issues.push({
+      category: 'seo',
+      severity: SEVERITY.ERROR,
+      rule: 'duplicate_title',
+      name: 'titleタグの重複',
+      message: `${titleTags.length}個のtitleタグが存在します。HTML仕様上、titleタグは1つのみ設置可能です。`,
+      elements: Array.from(titleTags),
+      solution: getDuplicateTitleSolution()
+    });
+  }
+
   // ページタイトルチェック
   if (!document.title || document.title.trim().length === 0) {
     issues.push({
@@ -282,6 +296,39 @@ function getMetaDescriptionSolution() {
 • ユーザーがクリックしたくなる説明
 • 主要キーワードを自然に含める
 • 各ページで固有の説明を設定`;
+}
+
+/**
+ * titleタグ重複の解決策
+ * @returns {string} 解決策のテキスト
+ */
+function getDuplicateTitleSolution() {
+  return `titleタグ重複の修正方法:
+
+🚨 問題: 複数のtitleタグが存在
+HTML5仕様では、titleタグは文書に1つのみ設置可能です。
+
+🔧 修正手順:
+1. 重複するtitleタグを特定
+2. 最も適切な内容のtitleタグを1つ選択
+3. 他の不要なtitleタグを削除
+
+✅ 正しい例:
+<head>
+  <title>ページタイトル | サイト名</title>
+  <!-- その他のメタタグ -->
+</head>
+
+❌ 問題のある例:
+<head>
+  <title>ページタイトル</title>
+  <title>別のタイトル</title>  ← 削除が必要
+</head>
+
+📖 影響:
+• 検索エンジンがページを正しく解釈できない
+• ブラウザタブでの表示が不安定
+• HTML仕様違反によるSEO悪影響`;
 }
 
 /**
