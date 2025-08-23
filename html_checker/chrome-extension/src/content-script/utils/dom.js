@@ -125,7 +125,7 @@ export function getElementText(element, maxLength = 50) {
  * @param {boolean} includeChildren - 子要素も含めるかどうか
  * @returns {string} 完全なHTMLソース
  */
-export function getElementFullHTML(element, includeChildren = true) {
+export function getElementFullHTML(element, _includeChildren = true) {
   if (!element || !element.outerHTML) {
     return 'HTML取得不可';
   }
@@ -160,31 +160,31 @@ function formatHTML(html) {
  * @returns {string} 要素の詳細情報
  */
 export function getElementDetails(element) {
-  if (element.tagName === "IMG") {
-    const src = element.src || element.getAttribute("src");
-    const alt = element.getAttribute("alt");
-    return `<img src="${src ? src.split("/").pop() : "src不明"}" alt="${alt || "(alt属性なし)"}">`;
-  } else if (element.tagName === "META") {
-    const name = element.getAttribute("name");
-    const content = element.getAttribute("content");
-    return `<meta name="${name || "name不明"}" content="${content || "content不明"}">`;
-  } else if (element.tagName === "SCRIPT") {
-    const src = element.getAttribute("src");
+  if (element.tagName === 'IMG') {
+    const src = element.src || element.getAttribute('src');
+    const alt = element.getAttribute('alt');
+    return `<img src="${src ? src.split('/').pop() : 'src不明'}" alt="${alt || '(alt属性なし)'}">`;
+  } else if (element.tagName === 'META') {
+    const name = element.getAttribute('name');
+    const content = element.getAttribute('content');
+    return `<meta name="${name || 'name不明'}" content="${content || 'content不明'}">`;
+  } else if (element.tagName === 'SCRIPT') {
+    const src = element.getAttribute('src');
     if (src) {
       return `<script src="${src}">`;
     } else {
       const scriptContent = element.textContent || element.innerHTML;
-      return `<script>${scriptContent.substring(0, 100)}${scriptContent.length > 100 ? "..." : ""}</script>`;
+      return `<script>${scriptContent.substring(0, 100)}${scriptContent.length > 100 ? '...' : ''}</script>`;
     }
-  } else if (element.tagName.startsWith("H")) {
+  } else if (element.tagName.startsWith('H')) {
     // 見出し要素の詳細表示
     const headingLevel = element.tagName.charAt(1);
-    const id = element.getAttribute("id") || "";
-    const className = element.getAttribute("class") || "";
+    const id = element.getAttribute('id') || '';
+    const className = element.getAttribute('class') || '';
     
     let innerContent = element.innerHTML.trim();
     if (innerContent.length > 200) {
-      innerContent = innerContent.substring(0, 200) + "...";
+      innerContent = innerContent.substring(0, 200) + '...';
     }
     
     let elementText = `<h${headingLevel}`;
@@ -193,55 +193,55 @@ export function getElementDetails(element) {
     elementText += `>${innerContent}</h${headingLevel}>`;
     
     return elementText;
-  } else if (["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName)) {
+  } else if (['INPUT', 'SELECT', 'TEXTAREA'].includes(element.tagName)) {
     // フォーム要素の詳細表示
-    const type = element.getAttribute("type") || "";
-    const name = element.getAttribute("name") || "";
-    const id = element.getAttribute("id") || "";
-    const placeholder = element.getAttribute("placeholder") || "";
+    const type = element.getAttribute('type') || '';
+    const name = element.getAttribute('name') || '';
+    const id = element.getAttribute('id') || '';
+    const placeholder = element.getAttribute('placeholder') || '';
     
     let formInfo = `<${element.tagName.toLowerCase()}`;
     if (type) formInfo += ` type="${type}"`;
     if (id) formInfo += ` id="${id}"`;
     if (name) formInfo += ` name="${name}"`;
     if (placeholder) formInfo += ` placeholder="${placeholder}"`;
-    formInfo += `>`;
+    formInfo += '>';
     
     return formInfo;
-  } else if (element.tagName === "A") {
+  } else if (element.tagName === 'A') {
     // リンク要素の詳細表示
-    const href = element.getAttribute("href") || "";
-    const title = element.getAttribute("title") || "";
-    const ariaLabel = element.getAttribute("aria-label") || "";
+    const href = element.getAttribute('href') || '';
+    const title = element.getAttribute('title') || '';
+    const ariaLabel = element.getAttribute('aria-label') || '';
     const textContent = element.textContent.trim();
     
-    let linkInfo = `<a`;
+    let linkInfo = '<a';
     if (href) linkInfo += ` href="${href}"`;
     if (title) linkInfo += ` title="${title}"`;
     if (ariaLabel) linkInfo += ` aria-label="${ariaLabel}"`;
-    linkInfo += `>`;
+    linkInfo += '>';
     
     if (textContent) {
-      linkInfo += textContent.length > 50 ? textContent.substring(0, 50) + "..." : textContent;
+      linkInfo += textContent.length > 50 ? textContent.substring(0, 50) + '...' : textContent;
     } else {
-      linkInfo += "(テキストなし)";
+      linkInfo += '(テキストなし)';
     }
     
-    linkInfo += `</a>`;
+    linkInfo += '</a>';
     return linkInfo;
-  } else if (element.tagName === "TABLE") {
+  } else if (element.tagName === 'TABLE') {
     // テーブル要素の詳細表示
-    const border = element.getAttribute("border") || "";
-    const cellpadding = element.getAttribute("cellpadding") || "";
-    const cellspacing = element.getAttribute("cellspacing") || "";
-    const className = element.getAttribute("class") || "";
+    const border = element.getAttribute('border') || '';
+    const cellpadding = element.getAttribute('cellpadding') || '';
+    const cellspacing = element.getAttribute('cellspacing') || '';
+    const className = element.getAttribute('class') || '';
     
-    let tableInfo = `<table`;
+    let tableInfo = '<table';
     if (className) tableInfo += ` class="${className}"`;
     if (border) tableInfo += ` border="${border}"`;
     if (cellpadding) tableInfo += ` cellpadding="${cellpadding}"`;
     if (cellspacing) tableInfo += ` cellspacing="${cellspacing}"`;
-    tableInfo += `>`;
+    tableInfo += '>';
     
     return tableInfo;
   }

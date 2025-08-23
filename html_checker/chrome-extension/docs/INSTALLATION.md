@@ -30,17 +30,3 @@ chrome-extension/
 │   └── options.html       # オプションHTML
 └── src/                   # ソースコード（開発用）
 ```
-
-## 更新時の手順
-
-### 1. コード変更後のビルド
-
-```bash
-npm run build
-```
-
-### 2. 拡張機能の再読み込み
-
-1. Chrome 拡張機能ページ（`chrome://extensions/`）を開く
-2. インストール済みの「Marui HTML Checker」を探す
-3. **「更新」**ボタン（リロードアイコン）をクリック

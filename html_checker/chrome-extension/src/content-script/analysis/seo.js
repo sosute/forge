@@ -3,7 +3,7 @@
  */
 
 import { SEVERITY } from '../config.js';
-import { debugLog } from '../utils/debug.js';
+// import { debugLog } from '../utils/debug.js'; // 未使用のためコメントアウト
 
 /**
  * SEO要素の全体分析

@@ -92,15 +92,15 @@ function addHighlightStyles() {
 function handleHighlightMessage(event) {
   if (event.data && event.data.type) {
     switch (event.data.type) {
-      case 'HTML_CHECKER_HIGHLIGHT_ELEMENTS':
-        highlightElements(event.data.elements);
-        break;
-      case 'HTML_CHECKER_CLEAR_HIGHLIGHTS':
-        clearAllHighlights();
-        break;
-      case 'HTML_CHECKER_SELECT_ELEMENT':
-        selectElement(event.data.element);
-        break;
+    case 'HTML_CHECKER_HIGHLIGHT_ELEMENTS':
+      highlightElements(event.data.elements);
+      break;
+    case 'HTML_CHECKER_CLEAR_HIGHLIGHTS':
+      clearAllHighlights();
+      break;
+    case 'HTML_CHECKER_SELECT_ELEMENT':
+      selectElement(event.data.element);
+      break;
     }
   }
 }

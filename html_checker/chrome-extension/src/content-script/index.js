@@ -6,7 +6,7 @@
 import { debugLog, errorLog } from './utils/debug.js';
 import { performFullCheck } from './engine/main-engine.js';
 import { initializeDrawer, displayResultsInDrawer, closeDrawer } from './ui/drawer.js';
-import { initializeHighlight, highlightAllIssueElements, clearAllHighlights, selectElement } from './ui/highlight.js';
+import { initializeHighlight, highlightAllIssueElements, clearAllHighlights } from './ui/highlight.js';
 
 /**
  * HTML Semantic Checker メインクラス
@@ -55,15 +55,15 @@ class HTMLSemanticChecker {
       if (!event.data || !event.data.type) return;
       
       switch (event.data.type) {
-        case 'HTML_CHECKER_START':
-          this.performFullCheck();
-          break;
-        case 'HTML_CHECKER_RECHECK':
-          this.performFullCheck(false); // 再チェックなので isInitialRun = false
-          break;
-        case 'HTML_CHECKER_CLOSE':
-          this.cleanup();
-          break;
+      case 'HTML_CHECKER_START':
+        this.performFullCheck();
+        break;
+      case 'HTML_CHECKER_RECHECK':
+        this.performFullCheck(false); // 再チェックなので isInitialRun = false
+        break;
+      case 'HTML_CHECKER_CLOSE':
+        this.cleanup();
+        break;
       }
     });
     
@@ -96,13 +96,13 @@ class HTMLSemanticChecker {
       
       // レガシーメッセージハンドリング
       switch (request.action) {
-        case 'startCheck':
-          this.performFullCheck(false); // レガシーアクションは再実行として扱う
-          sendResponse({ success: true });
-          return true;
-        case 'getResults':
-          sendResponse({ results: this.checkResults });
-          return true;
+      case 'startCheck':
+        this.performFullCheck(false); // レガシーアクションは再実行として扱う
+        sendResponse({ success: true });
+        return true;
+      case 'getResults':
+        sendResponse({ results: this.checkResults });
+        return true;
       }
       
       return false;

@@ -3,7 +3,7 @@
  */
 
 import { SEVERITY, TRACKING_PIXEL_PATTERNS } from '../config.js';
-import { isNonVisibleElement, isExcludedElement, getElementFullHTML } from '../utils/dom.js';
+import { isExcludedElement } from '../utils/dom.js';
 import { debugLog } from '../utils/debug.js';
 
 /**
@@ -137,24 +137,24 @@ function checkImageAltAttributes(targetElements = null) {
     imagesWithoutAlt.filter(img => {
       // 従来の方式：すべてのチェックを実行
     // URLチェック
-    const src = img.src || img.getAttribute('src') || '';
-    const isTrackingUrl = TRACKING_PIXEL_PATTERNS.some(pattern => pattern.test(src));
+      const src = img.src || img.getAttribute('src') || '';
+      const isTrackingUrl = TRACKING_PIXEL_PATTERNS.some(pattern => pattern.test(src));
     
-    // サイズチェック（1x1ピクセル）
-    const is1x1Pixel = (img.width === 1 && img.height === 1) || 
+      // サイズチェック（1x1ピクセル）
+      const is1x1Pixel = (img.width === 1 && img.height === 1) || 
                       (img.naturalWidth === 1 && img.naturalHeight === 1) ||
                       (img.getAttribute('width') === '1' && img.getAttribute('height') === '1');
     
-    // 隠し要素チェック
-    const computedStyle = window.getComputedStyle(img);
-    const isHidden = computedStyle.display === 'none' || 
+      // 隠し要素チェック
+      const computedStyle = window.getComputedStyle(img);
+      const isHidden = computedStyle.display === 'none' || 
                     computedStyle.visibility === 'hidden' ||
                     img.style.display === 'none' ||
                     img.style.visibility === 'hidden';
     
-    // トラッキングピクセルでない場合のみ含める
-    return !isTrackingUrl && !is1x1Pixel && !isHidden;
-  });
+      // トラッキングピクセルでない場合のみ含める
+      return !isTrackingUrl && !is1x1Pixel && !isHidden;
+    });
 
   debugLog('Checker', 'After filtering tracking pixels:', filteredImages.length);
 
@@ -298,35 +298,35 @@ function checkAriaRequired() {
     
     // roleに応じた必須属性をチェック
     switch (role) {
-      case 'button':
-        if (!element.hasAttribute('aria-label') && 
+    case 'button':
+      if (!element.hasAttribute('aria-label') && 
             !element.hasAttribute('aria-labelledby') && 
             !element.textContent.trim()) {
-          missingRequired.push(element);
-        }
-        break;
-      case 'tab':
-        if (!element.hasAttribute('aria-selected')) {
-          missingRequired.push(element);
-        }
-        break;
-      case 'tabpanel':
-        if (!element.hasAttribute('aria-labelledby')) {
-          missingRequired.push(element);
-        }
-        break;
-      case 'slider':
-        if (!element.hasAttribute('aria-valuenow') || 
+        missingRequired.push(element);
+      }
+      break;
+    case 'tab':
+      if (!element.hasAttribute('aria-selected')) {
+        missingRequired.push(element);
+      }
+      break;
+    case 'tabpanel':
+      if (!element.hasAttribute('aria-labelledby')) {
+        missingRequired.push(element);
+      }
+      break;
+    case 'slider':
+      if (!element.hasAttribute('aria-valuenow') || 
             !element.hasAttribute('aria-valuemin') || 
             !element.hasAttribute('aria-valuemax')) {
-          missingRequired.push(element);
-        }
-        break;
-      case 'progressbar':
-        if (!element.hasAttribute('aria-valuenow')) {
-          missingRequired.push(element);
-        }
-        break;
+        missingRequired.push(element);
+      }
+      break;
+    case 'progressbar':
+      if (!element.hasAttribute('aria-valuenow')) {
+        missingRequired.push(element);
+      }
+      break;
     }
   });
 
