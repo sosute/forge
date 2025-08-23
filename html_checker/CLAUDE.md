@@ -36,12 +36,28 @@ npm run quality  # lint + format + build の統合チェック
 - `npm run format:check` - フォーマットチェックのみ
 - `npm run quality` - 全品質チェック + ビルド確認
 
-### 実行タイミング
-1. **Issue対応開始時**: 依存関係とビルド確認
-2. **コード変更後**: `npm run lint` で即座に問題修正
-3. **コミット前**: `npm run quality` で最終品質確認
-4. **PR作成前**: 全チェック通過を確認
-5. **マージ後**: プロジェクト全体の動作確認
+### 実行タイミング（重要度順）
+1. **PR作成前** ⭐⭐⭐⭐⭐: `npm run quality` で品質保証（**最重要**）
+2. **コミット前**: `npm run quality` で最終品質確認
+3. **コード変更後**: `npm run lint` で即座に問題修正
+4. **Issue対応開始時**: 依存関係とビルド確認
+5. **マージ後**: プロジェクト全体の動作確認（健全性チェック）
+
+### 品質チェック失敗時の対応
+**ESLint-Prettier競合エラーの解決**:
+```bash
+# 1. ESLintで自動修正
+npm run lint
+
+# 2. Prettierでフォーマット
+npm run format
+
+# 3. 最終確認
+npm run quality
+```
+
+**よくある競合**: インデント、クォート、末尾カンマの設定差異
+**解決策**: `.eslintrc.cjs`と`.prettierrc`の設定を統一済み
 
 ### コードレビュー基準
 - ESLintエラーゼロ（警告は要相談）
@@ -49,6 +65,7 @@ npm run quality  # lint + format + build の統合チェック
 - ビルド成功必須
 - 変更理由の明確な説明
 - 影響範囲の適切な調査
+- **PR作成前の品質チェック完了必須**
 
 ### 継続的品質向上
 - 月次でESLintルール見直し
