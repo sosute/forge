@@ -57,7 +57,7 @@ export function detectHeadingIssues(targetElements = null) {
 
   // H1タグチェック（プリプロセス済み要素を使用）
   const h1Elements = targetElements ? targetElements.headings.h1 : 
-                     Array.from(document.querySelectorAll('h1')).filter(h => !isExcludedElement(h));
+    Array.from(document.querySelectorAll('h1')).filter(h => !isExcludedElement(h));
   debugLog('Checker', 'H1 elements found (excluding excluded elements):', h1Elements.length);
   
   if (h1Elements.length === 0) {
@@ -87,7 +87,7 @@ export function detectHeadingIssues(targetElements = null) {
 function analyzeDetailedHeadingStructure(targetElements = null) {
   const issues = [];
   const headings = targetElements ? targetElements.headings.all : 
-                   Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).filter(h => !isExcludedElement(h));
+    Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).filter(h => !isExcludedElement(h));
   const problematicHeadings = [];
   const headingStructureProblems = [];
   let previousLevel = 0;
@@ -128,7 +128,7 @@ function analyzeDetailedHeadingStructure(targetElements = null) {
             element: heading,
             problem: `H${level}が空です（テキスト内容がありません）`,
             text: `実際のHTML:\n${getElementFullHTML(heading)}`,
-            suggestion: `この見出し要素を削除するか、適切なテキストを追加してください`
+            suggestion: 'この見出し要素を削除するか、適切なテキストを追加してください'
           });
         }
       } else {
@@ -138,20 +138,20 @@ function analyzeDetailedHeadingStructure(targetElements = null) {
           element: heading,
           problem: `H${level}が空です（テキスト内容がありません）`,
           text: `実際のHTML:\n${getElementFullHTML(heading)}`,
-          suggestion: `この見出し要素を削除するか、適切なテキストを追加してください`
+          suggestion: 'この見出し要素を削除するか、適切なテキストを追加してください'
         });
       }
     }
     
     // 画像のみのH1に対する警告（エラーではなく警告として）
     if (isImageOnlyH1) {
-      debugLog('Checker', `Image-only H1 detected with alt text`);
+      debugLog('Checker', 'Image-only H1 detected with alt text');
       problematicHeadings.push(heading);
       headingStructureProblems.push({
         element: heading,
-        problem: `H1が画像のみです（SEOとアクセシビリティの観点から改善推奨）`,
+        problem: 'H1が画像のみです（SEOとアクセシビリティの観点から改善推奨）',
         text: `実際のHTML:\n${getElementFullHTML(heading)}`,
-        suggestion: `画像のH1をテキストベースのH1に変更することを推奨します：<h1>阪急ビューティーオンライン</h1>\n画像は<img>タグとして別途配置してください。`
+        suggestion: '画像のH1をテキストベースのH1に変更することを推奨します：<h1>阪急ビューティーオンライン</h1>\n画像は<img>タグとして別途配置してください。'
       });
     }
     
@@ -201,13 +201,13 @@ function analyzeDetailedHeadingStructure(targetElements = null) {
       heading.closest('footer') !== null ||
       (heading.className.includes('footer') && heading.className.includes('logo'))
     )) {
-      debugLog('Checker', `Decorative H1 detected in footer`);
+      debugLog('Checker', 'Decorative H1 detected in footer');
       problematicHeadings.push(heading);
       headingStructureProblems.push({
         element: heading,
-        problem: `H1がフッターに使用されています（装飾目的での不適切な使用）`,
+        problem: 'H1がフッターに使用されています（装飾目的での不適切な使用）',
         text: `実際のHTML:\n${getElementFullHTML(heading)}`,
-        suggestion: `フッターのロゴはdivやspanに変更し、ページ本文のメインタイトルにH1を使用してください`
+        suggestion: 'フッターのロゴはdivやspanに変更し、ページ本文のメインタイトルにH1を使用してください'
       });
     }
     
@@ -231,9 +231,9 @@ function analyzeDetailedHeadingStructure(targetElements = null) {
         problematicHeadings.push(heading);
         headingStructureProblems.push({
           element: heading,
-          problem: `H1が複数存在します（ページに1つのH1のみ推奨）`,
+          problem: 'H1が複数存在します（ページに1つのH1のみ推奨）',
           text: `実際のHTML:\n${getElementFullHTML(heading)}`,
-          suggestion: `H1をH2以下に変更するか、このH1を削除してください`
+          suggestion: 'H1をH2以下に変更するか、このH1を削除してください'
         });
       }
     }

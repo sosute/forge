@@ -4,7 +4,7 @@
  */
 
 import { debugLog, errorLog } from '../utils/debug.js';
-import { isHtmlCheckerElement } from '../utils/dom.js';
+// import { isHtmlCheckerElement } from '../utils/dom.js'; // 未使用のためコメントアウト
 import { getAnalysisTargetElements } from './element-preprocessor.js';
 import { analyzeHeadingStructure, detectHeadingIssues } from '../analysis/heading.js';
 import { analyzeAccessibility, detectAccessibilityIssues } from '../analysis/accessibility.js';
@@ -238,15 +238,15 @@ export function calculateOverallScore(results) {
   // 問題の重要度に基づくペナルティ
   results.issues.forEach(issue => {
     switch (issue.severity) {
-      case 'error':
-        score -= 10;
-        break;
-      case 'warning':
-        score -= 5;
-        break;
-      case 'info':
-        score -= 2;
-        break;
+    case 'error':
+      score -= 10;
+      break;
+    case 'warning':
+      score -= 5;
+      break;
+    case 'info':
+      score -= 2;
+      break;
     }
   });
   

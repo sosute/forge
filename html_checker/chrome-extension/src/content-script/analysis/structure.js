@@ -2,8 +2,8 @@
  * HTML構造品質分析モジュール
  */
 
-import { SEVERITY, PRESENTATIONAL_TAGS, INLINE_SEMANTIC_TAGS } from '../config.js';
-import { debugLog } from '../utils/debug.js';
+import { SEVERITY, PRESENTATIONAL_TAGS } from '../config.js';
+// import { debugLog } from '../utils/debug.js'; // 未使用のためコメントアウト
 
 /**
  * HTML構造品質を分析
@@ -198,7 +198,7 @@ function checkDuplicateIds() {
       name: 'IDの重複',
       message: `ID "${id}" が${elements.length}個の要素で重複しています。`,
       elements: elements,
-      solution: `各要素に一意のIDを割り当ててください。同じスタイルを適用する場合はclassを使用してください。`
+      solution: '各要素に一意のIDを割り当ててください。同じスタイルを適用する場合はclassを使用してください。'
     });
   });
 
@@ -311,7 +311,6 @@ function calculateSemanticScore() {
  * @returns {boolean} 擬似要素が存在する場合true
  */
 function hasPseudoElement(element) {
-  const styles = window.getComputedStyle(element);
   const beforeContent = window.getComputedStyle(element, ':before').content;
   const afterContent = window.getComputedStyle(element, ':after').content;
   

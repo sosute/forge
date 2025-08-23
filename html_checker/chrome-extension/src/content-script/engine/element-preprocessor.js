@@ -191,7 +191,7 @@ function classifySemanticElements(element, semanticElements) {
   if (tagName === 'div') {
     const text = element.textContent.trim();
     // 日付パターンをチェック（簡単な例）
-    if (text.match(/\d{4}[年\-\/]\d{1,2}[月\-\/]\d{1,2}日?|\d{1,2}[月\-\/]\d{1,2}日?[,\s]*\d{4}/)) {
+    if (text.match(/\d{4}[年\-/]\d{1,2}[月\-/]\d{1,2}日?|\d{1,2}[月\-/]\d{1,2}日?[,\s]*\d{4}/)) {
       semanticElements.dateElements.push(element);
     }
   }

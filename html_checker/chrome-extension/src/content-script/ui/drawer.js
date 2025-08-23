@@ -8,7 +8,6 @@ import { getElementDetails, isNonVisibleElement } from '../utils/dom.js';
 
 // グローバル状態
 let drawerElement = null;
-let currentResults = null;
 
 /**
  * ドロワーの初期化
@@ -360,6 +359,7 @@ function getDrawerStyles() {
       list-style: none;
       padding: 0;
       margin: 0 0 20px 0;
+      overflow: hidden;
     }
 
     .hsc-element-item {
@@ -370,6 +370,8 @@ function getDrawerStyles() {
       margin-bottom: 8px;
       cursor: pointer;
       transition: all 0.2s;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
 
     .hsc-element-item:hover {
@@ -388,6 +390,10 @@ function getDrawerStyles() {
       color: #495057;
       text-align: left !important;
       direction: ltr !important;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      max-width: 100%;
     }
 
     /* === 解決方法のシンプルなスタイル === */
@@ -549,7 +555,6 @@ export function openDrawer() {
   }
   
   drawerElement.classList.add('open');
-  drawerOpen = true;
   debugLog('Drawer', 'Drawer opened');
 }
 
@@ -560,7 +565,6 @@ export function closeDrawer() {
   if (drawerElement) {
     drawerElement.classList.remove('open');
   }
-  drawerOpen = false;
   debugLog('Drawer', 'Drawer closed');
 }
 
@@ -569,7 +573,6 @@ export function closeDrawer() {
  * @param {Object} results - 分析結果
  */
 export function displayResultsInDrawer(results) {
-  currentResults = results;
   
   if (!drawerElement) {
     initializeDrawer();
@@ -590,7 +593,6 @@ export function displayResultsInDrawer(results) {
   
   openDrawer();
 }
-
 
 /**
  * 問題リストを更新
@@ -659,16 +661,16 @@ function createIssueElement(name, issue) {
         <h4>関連要素 (${issue.allElements.length}個):</h4>
         <ul class="hsc-elements-list">
           ${issue.allElements.map((element, index) => {
-            // 元の詳細な要素表示を使用
-            const elementDetails = getElementDetails(element);
-            const isNonVisible = isNonVisibleElement(element);
+    // 元の詳細な要素表示を使用
+    const elementDetails = getElementDetails(element);
+    const isNonVisible = isNonVisibleElement(element);
             
-            return `
+    return `
               <li class="hsc-element-item ${isNonVisible ? 'non-visible' : ''}" data-element-index="${index}" ${isNonVisible ? 'data-non-visible="true"' : ''}>
                 <div class="hsc-element-tag">${escapeHtml(elementDetails)}</div>
               </li>
             `;
-          }).join('')}
+  }).join('')}
         </ul>
       </div>
     `;
@@ -695,7 +697,7 @@ function createIssueElement(name, issue) {
     </div>
     <div class="hsc-issue-details">
       <div class="hsc-issue-message">${issue.message}</div>
-      ${issue.text ? `<div class="hsc-issue-html"><strong>検出されたHTML:</strong><br><code style="display: block; background: #f8f9fa; padding: 8px; border-radius: 4px; margin: 8px 0; white-space: pre-wrap; font-size: 11px;">${escapeHtml(issue.text)}</code></div>` : ''}
+      ${issue.text ? `<div class="hsc-issue-html"><strong>検出されたHTML:</strong><br><code style="display: block; background: #f8f9fa; padding: 8px; border-radius: 4px; margin: 8px 0; white-space: pre-wrap; font-size: 11px; word-break: break-all; overflow-wrap: break-word;">${escapeHtml(issue.text)}</code></div>` : ''}
       ${elementsListHTML}
       ${solutionHTML}
     </div>
@@ -736,7 +738,7 @@ function createIssueElement(name, issue) {
         debugLog('Drawer', `Element item ${index} clicked`);
         
         if (issue.allElements && issue.allElements[index]) {
-          debugLog('Drawer', `Selecting element:`, issue.allElements[index]);
+          debugLog('Drawer', 'Selecting element:', issue.allElements[index]);
           // 直接ハイライト関数を呼び出し
           selectElement(issue.allElements[index]);
         } else {
