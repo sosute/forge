@@ -26,7 +26,7 @@ export function errorLog(prefix, ...args) {
 
 /**
  * 警告ログ出力
- * @param {string} prefix - ログのプレフィックス  
+ * @param {string} prefix - ログのプレフィックス
  * @param {...any} args - ログ引数
  */
 export function warnLog(prefix, ...args) {

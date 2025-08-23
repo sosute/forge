@@ -19,10 +19,10 @@ export function initializeHighlight() {
   if (!document.getElementById(HIGHLIGHT_STYLE_ID)) {
     addHighlightStyles();
   }
-  
+
   // メッセージリスナーを追加
   window.addEventListener('message', handleHighlightMessage);
-  
+
   debugLog('Highlight', 'Highlight system initialized');
 }
 
@@ -81,7 +81,7 @@ function addHighlightStyles() {
     }
     
   `;
-  
+
   document.head.appendChild(styleElement);
 }
 
@@ -92,15 +92,15 @@ function addHighlightStyles() {
 function handleHighlightMessage(event) {
   if (event.data && event.data.type) {
     switch (event.data.type) {
-    case 'HTML_CHECKER_HIGHLIGHT_ELEMENTS':
-      highlightElements(event.data.elements);
-      break;
-    case 'HTML_CHECKER_CLEAR_HIGHLIGHTS':
-      clearAllHighlights();
-      break;
-    case 'HTML_CHECKER_SELECT_ELEMENT':
-      selectElement(event.data.element);
-      break;
+      case 'HTML_CHECKER_HIGHLIGHT_ELEMENTS':
+        highlightElements(event.data.elements);
+        break;
+      case 'HTML_CHECKER_CLEAR_HIGHLIGHTS':
+        clearAllHighlights();
+        break;
+      case 'HTML_CHECKER_SELECT_ELEMENT':
+        selectElement(event.data.element);
+        break;
     }
   }
 }
@@ -111,26 +111,27 @@ function handleHighlightMessage(event) {
  */
 export function highlightAllIssueElements(results) {
   clearAllHighlights();
-  
+
   const allElements = new Set();
-  
+
   // 全ての問題から要素を収集
   results.issues.forEach(issue => {
     if (issue.elements && Array.isArray(issue.elements)) {
       issue.elements.forEach(element => {
-        if (element && element.nodeType === 1) { // Element node
+        if (element && element.nodeType === 1) {
+          // Element node
           allElements.add(element);
         }
       });
     }
   });
-  
+
   // 要素をハイライト
   allElements.forEach(element => {
     element.classList.add('hsc-highlighted-element');
     highlightedElements.push(element);
   });
-  
+
   debugLog('Highlight', `Highlighted ${allElements.size} issue elements`);
 }
 
@@ -140,9 +141,9 @@ export function highlightAllIssueElements(results) {
  */
 export function highlightElements(elements) {
   // 既存のハイライトをクリアしない（持続性を保つ）
-  
+
   if (!Array.isArray(elements)) return;
-  
+
   elements.forEach(element => {
     if (element && element.nodeType === 1) {
       // 既にハイライトされていない場合のみ追加
@@ -152,7 +153,7 @@ export function highlightElements(elements) {
       }
     }
   });
-  
+
   debugLog('Highlight', `Highlighted ${elements.length} elements`);
 }
 
@@ -162,48 +163,48 @@ export function highlightElements(elements) {
  */
 export function selectElement(element) {
   debugLog('Highlight', 'selectElement called with:', element);
-  
+
   if (!element) {
     debugLog('Highlight', 'No element provided');
     return;
   }
-  
+
   if (element.nodeType !== 1) {
     debugLog('Highlight', 'Element is not an Element node:', element.nodeType);
     return;
   }
-  
+
   clearSelectedElementHighlight();
-  
+
   selectedElement = element;
   element.classList.add('hsc-selected-element');
-  
+
   debugLog('Highlight', 'Element classes after selection:', element.className);
-  
+
   // マーカーを作成
   try {
     createElementMarker(element);
   } catch (error) {
     debugLog('Highlight', 'Error creating marker:', error);
   }
-  
+
   // 要素が見える位置にスクロール（少し遅延を入れて確実に実行）
   setTimeout(() => {
     try {
       element.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
-        inline: 'nearest'
+        inline: 'nearest',
       });
       debugLog('Highlight', 'Scrolled to element');
     } catch (error) {
       debugLog('Highlight', 'Error scrolling to element:', error);
     }
   }, 100);
-  
+
   // 他のハイライトは維持する（元の実装に合わせて持続性を保つ）
   // 一時的なクリアは行わない
-  
+
   debugLog('Highlight', 'Element selected successfully:', element.tagName);
 }
 
@@ -215,13 +216,12 @@ export function clearSelectedElementHighlight() {
     selectedElement.classList.remove('hsc-selected-element');
     selectedElement = null;
   }
-  
+
   // マーカーを削除
   if (selectedElementMarker) {
     selectedElementMarker.remove();
     selectedElementMarker = null;
   }
-  
 }
 
 /**
@@ -235,10 +235,10 @@ export function clearAllHighlights() {
     }
   });
   highlightedElements = [];
-  
+
   // 選択要素のハイライトをクリア
   clearSelectedElementHighlight();
-  
+
   debugLog('Highlight', 'All highlights cleared');
 }
 
@@ -250,42 +250,56 @@ function createElementMarker(element) {
   if (selectedElementMarker) {
     selectedElementMarker.remove();
   }
-  
+
   const marker = document.createElement('div');
   marker.className = 'hsc-element-marker';
   marker.textContent = element.tagName.toLowerCase();
-  
+
   // img, input, br, hr等のvoid要素は子要素を持てないため、親要素に配置
-  const voidElements = ['IMG', 'INPUT', 'BR', 'HR', 'META', 'LINK', 'AREA', 'BASE', 'COL', 'EMBED', 'SOURCE', 'TRACK', 'WBR'];
-  
+  const voidElements = [
+    'IMG',
+    'INPUT',
+    'BR',
+    'HR',
+    'META',
+    'LINK',
+    'AREA',
+    'BASE',
+    'COL',
+    'EMBED',
+    'SOURCE',
+    'TRACK',
+    'WBR',
+  ];
+
   if (voidElements.includes(element.tagName)) {
     // void要素の場合は親要素に配置し、位置を調整
     const parent = element.parentElement;
     if (parent) {
       parent.style.position = parent.style.position || 'relative';
       parent.appendChild(marker);
-      
+
       // 要素の位置に合わせてマーカーを配置
       const rect = element.getBoundingClientRect();
       const parentRect = parent.getBoundingClientRect();
-      
+
       marker.style.position = 'absolute';
-      marker.style.left = (rect.left - parentRect.left) + 'px';
-      marker.style.top = (rect.top - parentRect.top - 25) + 'px';
+      marker.style.left = rect.left - parentRect.left + 'px';
+      marker.style.top = rect.top - parentRect.top - 25 + 'px';
     } else {
       // 親要素がない場合はbodyに配置
       document.body.appendChild(marker);
       const rect = element.getBoundingClientRect();
       marker.style.position = 'fixed';
       marker.style.left = rect.left + 'px';
-      marker.style.top = (rect.top - 25) + 'px';
+      marker.style.top = rect.top - 25 + 'px';
     }
   } else {
     // 通常の要素の場合
     element.style.position = element.style.position || 'relative';
     element.appendChild(marker);
   }
-  
+
   selectedElementMarker = marker;
 }
 
@@ -300,16 +314,16 @@ function createElementMarker(element) {
  */
 export function cleanupHighlight() {
   clearAllHighlights();
-  
+
   // スタイルを削除
   const styleElement = document.getElementById(HIGHLIGHT_STYLE_ID);
   if (styleElement) {
     styleElement.remove();
   }
-  
+
   // メッセージリスナーを削除
   window.removeEventListener('message', handleHighlightMessage);
-  
+
   debugLog('Highlight', 'Highlight system cleaned up');
 }
 

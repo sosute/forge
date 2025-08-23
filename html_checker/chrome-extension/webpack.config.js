@@ -4,12 +4,12 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     'content-script': './src/content-script/index.js',
-    'background': './background.js'
+    background: './background.js',
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true
+    clean: true,
   },
   mode: 'production',
   devtool: 'source-map',
@@ -21,11 +21,11 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
-    ]
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+    ],
   },
   plugins: [
     new CopyPlugin({
@@ -37,11 +37,11 @@ module.exports = {
         { from: 'popup.js', to: 'popup.js' },
         { from: 'options.html', to: 'options.html' },
         { from: 'options.js', to: 'options.js' },
-        { from: 'assets', to: 'assets', noErrorOnMissing: true }
-      ]
-    })
+        { from: 'assets', to: 'assets', noErrorOnMissing: true },
+      ],
+    }),
   ],
   optimization: {
-    minimize: false // 開発中はminifyしない
-  }
+    minimize: false, // 開発中はminifyしない
+  },
 };

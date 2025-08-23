@@ -52,14 +52,18 @@ function checkLegacyGoogleAnalytics() {
   Array.from(scripts).forEach(script => {
     const content = script.textContent || script.innerHTML || '';
     const src = script.src || '';
-    
+
     // UAパターンまたは古いGA JSファイルをチェック
-    const hasLegacyPattern = LEGACY_GA_PATTERNS.some(pattern => 
-      pattern.test(content) || pattern.test(src)
+    const hasLegacyPattern = LEGACY_GA_PATTERNS.some(
+      pattern => pattern.test(content) || pattern.test(src)
     );
-    
+
     if (hasLegacyPattern) {
-      debugLog('Checker', 'Legacy GA code detected:', content.substring(0, 100));
+      debugLog(
+        'Checker',
+        'Legacy GA code detected:',
+        content.substring(0, 100)
+      );
       problematicScripts.push(script);
     }
   });
@@ -72,7 +76,7 @@ function checkLegacyGoogleAnalytics() {
       name: '古いGoogle Analyticsコード',
       message: `${problematicScripts.length}個の古いGoogle Analytics（UA-）コードが検出されました。Google Analytics 4（GA4）への移行を検討してください。`,
       elements: problematicScripts,
-      solution: getLegacyGASolution()
+      solution: getLegacyGASolution(),
     });
   }
 
@@ -94,7 +98,7 @@ function checkLegacyGTMContainer() {
   Array.from(scripts).forEach(script => {
     const content = script.textContent || script.innerHTML || '';
     const src = script.src || '';
-    
+
     if (legacyGTMPattern.test(content) || legacyGTMPattern.test(src)) {
       // ここで特定の古いコンテナIDかどうかを判定
       const matches = (content + src).match(legacyGTMPattern);
@@ -113,7 +117,7 @@ function checkLegacyGTMContainer() {
       name: '古いGTMコンテナの可能性',
       message: `${problematicScripts.length}個のGoogle Tag Managerコンテナが検出されました。使用していない古いコンテナがないか確認してください。`,
       elements: problematicScripts,
-      solution: getLegacyGTMSolution()
+      solution: getLegacyGTMSolution(),
     });
   }
 
@@ -132,13 +136,17 @@ function checkAdobeAnalytics() {
   Array.from(scripts).forEach(script => {
     const content = script.textContent || script.innerHTML || '';
     const src = script.src || '';
-    
-    const hasAdobePattern = ADOBE_PATTERNS.some(pattern => 
-      pattern.test(content) || pattern.test(src)
+
+    const hasAdobePattern = ADOBE_PATTERNS.some(
+      pattern => pattern.test(content) || pattern.test(src)
     );
-    
+
     if (hasAdobePattern) {
-      debugLog('Checker', 'Adobe Analytics code detected:', content.substring(0, 100));
+      debugLog(
+        'Checker',
+        'Adobe Analytics code detected:',
+        content.substring(0, 100)
+      );
       problematicScripts.push(script);
     }
   });
@@ -151,7 +159,7 @@ function checkAdobeAnalytics() {
       name: 'Adobe Analyticsコード',
       message: `${problematicScripts.length}個のAdobe Analytics/Omnitureコードが検出されました。使用していない場合は削除を検討してください。`,
       elements: problematicScripts,
-      solution: getAdobeAnalyticsSolution()
+      solution: getAdobeAnalyticsSolution(),
     });
   }
 
@@ -169,10 +177,11 @@ function checkUnnecessaryNoScript() {
 
   Array.from(noscriptTags).forEach(noscript => {
     const content = noscript.innerHTML.trim();
-    
+
     // 空または<!-- -->コメントのみの場合
-    const isEmpty = content === '' || /^<!--.*-->$/.test(content.replace(/\s/g, ''));
-    
+    const isEmpty =
+      content === '' || /^<!--.*-->$/.test(content.replace(/\s/g, ''));
+
     if (isEmpty) {
       debugLog('Checker', 'Empty noscript tag detected');
       problematicTags.push(noscript);
@@ -187,7 +196,7 @@ function checkUnnecessaryNoScript() {
       name: '不要なnoscriptタグ',
       message: `${problematicTags.length}個の空または不要なnoscriptタグが検出されました。`,
       elements: problematicTags,
-      solution: getUnnecessaryNoScriptSolution()
+      solution: getUnnecessaryNoScriptSolution(),
     });
   }
 
@@ -205,10 +214,10 @@ function checkOldRobotsMetaTags() {
 
   Array.from(metaTags).forEach(meta => {
     const content = meta.getAttribute('content') || '';
-    
+
     // 古いROBOTSディレクティブをチェック
     const hasOldDirectives = /\b(NOODP|NOYDIR|NOARCHIVE)\b/i.test(content);
-    
+
     if (hasOldDirectives) {
       debugLog('Checker', 'Old ROBOTS directive detected:', content);
       problematicTags.push(meta);
@@ -223,7 +232,7 @@ function checkOldRobotsMetaTags() {
       name: '古いROBOTSメタタグ',
       message: `${problematicTags.length}個の古いROBOTSディレクティブ（NOODP、NOYDIR、NOARCHIVE）が検出されました。これらは現在サポートされていません。`,
       elements: problematicTags,
-      solution: getOldRobotsMetaSolution()
+      solution: getOldRobotsMetaSolution(),
     });
   }
 
@@ -246,7 +255,7 @@ function checkDeprecatedMetaTags() {
       name: '廃止されたmeta keywordsタグ',
       message: `${keywordsMeta.length}個のmeta keywordsタグが検出されました。現在のSEOでは効果がなく、削除を推奨します。`,
       elements: Array.from(keywordsMeta),
-      solution: getDeprecatedMetaSolution()
+      solution: getDeprecatedMetaSolution(),
     });
   }
 

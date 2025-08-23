@@ -31,26 +31,30 @@ function checkDateInformation() {
 
   // 日付パターン（元の実装から復元）
   const datePatterns = [
-    /\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b/,  // 2023-01-15, 2023/01/15
-    /\b\d{1,2}[-/]\d{1,2}[-/]\d{4}\b/,  // 15-01-2023, 15/01/2023
-    /\b\d{4}年\d{1,2}月\d{1,2}日\b/,      // 2023年1月15日
-    /\b\d{1,2}月\d{1,2}日\b/,             // 1月15日
+    /\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b/, // 2023-01-15, 2023/01/15
+    /\b\d{1,2}[-/]\d{1,2}[-/]\d{4}\b/, // 15-01-2023, 15/01/2023
+    /\b\d{4}年\d{1,2}月\d{1,2}日\b/, // 2023年1月15日
+    /\b\d{1,2}月\d{1,2}日\b/, // 1月15日
     /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},?\s+\d{4}\b/i, // Jan 15, 2023
-    /\b\d{1,2}\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b/i     // 15 Jan 2023
+    /\b\d{1,2}\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b/i, // 15 Jan 2023
   ];
 
   Array.from(divElements).forEach(div => {
     const text = div.textContent.trim();
-    
+
     // 日付パターンに一致し、すでにtimeタグで囲まれていない場合
     if (datePatterns.some(pattern => pattern.test(text))) {
       // timeタグが子要素にないかチェック
       const hasTimeTag = div.querySelector('time') !== null;
       // divの親がすでにtimeタグでないかチェック
       const isInTimeTag = div.closest('time') !== null;
-      
-      if (!hasTimeTag && !isInTimeTag && text.length < 100) { // 長すぎるテキストは除外
-        debugLog('Checker', `Date pattern found in div: ${text.substring(0, 50)}`);
+
+      if (!hasTimeTag && !isInTimeTag && text.length < 100) {
+        // 長すぎるテキストは除外
+        debugLog(
+          'Checker',
+          `Date pattern found in div: ${text.substring(0, 50)}`
+        );
         problematicElements.push(div);
       }
     }
@@ -64,7 +68,7 @@ function checkDateInformation() {
       name: 'DIVタグでの日付情報表現',
       message: `${problematicElements.length}個のDIVタグで日付情報が表現されています。意味的により適切な<time>タグの使用を検討してください。`,
       elements: problematicElements,
-      solution: getDateInformationSolution()
+      solution: getDateInformationSolution(),
     });
   }
 

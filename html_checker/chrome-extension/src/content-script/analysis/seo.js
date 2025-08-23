@@ -13,27 +13,32 @@ export function analyzeSEO() {
   const metaDescription = document.querySelector('meta[name="description"]');
   const metaKeywords = document.querySelector('meta[name="keywords"]');
   const canonicalLink = document.querySelector('link[rel="canonical"]');
-  
+
   return {
     title: {
       exists: !!document.title,
       length: document.title.length,
-      isOptimal: document.title.length >= 30 && document.title.length <= 60
+      isOptimal: document.title.length >= 30 && document.title.length <= 60,
     },
     metaDescription: {
       exists: !!metaDescription,
-      length: metaDescription ? metaDescription.getAttribute('content').length : 0,
-      isOptimal: metaDescription ? 
-        metaDescription.getAttribute('content').length >= 120 && 
-        metaDescription.getAttribute('content').length <= 160 : false
+      length: metaDescription
+        ? metaDescription.getAttribute('content').length
+        : 0,
+      isOptimal: metaDescription
+        ? metaDescription.getAttribute('content').length >= 120 &&
+          metaDescription.getAttribute('content').length <= 160
+        : false,
     },
     hasKeywords: !!metaKeywords,
     hasCanonical: !!canonicalLink,
     openGraph: {
       hasOgTitle: !!document.querySelector('meta[property="og:title"]'),
-      hasOgDescription: !!document.querySelector('meta[property="og:description"]'),
-      hasOgImage: !!document.querySelector('meta[property="og:image"]')
-    }
+      hasOgDescription: !!document.querySelector(
+        'meta[property="og:description"]'
+      ),
+      hasOgImage: !!document.querySelector('meta[property="og:image"]'),
+    },
   };
 }
 
@@ -76,7 +81,7 @@ function checkMetaElements() {
       name: 'titleタグの重複',
       message: `${titleTags.length}個のtitleタグが存在します。HTML仕様上、titleタグは1つのみ設置可能です。`,
       elements: Array.from(titleTags),
-      solution: getDuplicateTitleSolution()
+      solution: getDuplicateTitleSolution(),
     });
   }
 
@@ -89,7 +94,7 @@ function checkMetaElements() {
       name: 'ページタイトルの欠落',
       message: 'ページにタイトルが設定されていません',
       elements: [],
-      solution: getTitleSolution()
+      solution: getTitleSolution(),
     });
   } else if (document.title.length < 30 || document.title.length > 60) {
     issues.push({
@@ -99,7 +104,7 @@ function checkMetaElements() {
       name: 'タイトルの長さが不適切',
       message: `タイトルの長さが${document.title.length}文字です（推奨: 30-60文字）`,
       elements: [],
-      solution: getTitleLengthSolution()
+      solution: getTitleLengthSolution(),
     });
   }
 
@@ -113,7 +118,7 @@ function checkMetaElements() {
       name: 'メタディスクリプションの欠落',
       message: 'メタディスクリプションが設定されていません',
       elements: [],
-      solution: getMetaDescriptionSolution()
+      solution: getMetaDescriptionSolution(),
     });
   } else {
     const content = metaDescription.getAttribute('content') || '';
@@ -124,7 +129,7 @@ function checkMetaElements() {
         rule: 'suboptimal_description_length',
         name: 'メタディスクリプションの長さが不適切',
         message: `メタディスクリプションの長さが${content.length}文字です（推奨: 120-160文字）`,
-        elements: [metaDescription]
+        elements: [metaDescription],
       });
     }
   }
@@ -139,7 +144,7 @@ function checkMetaElements() {
       name: 'canonicalリンクの欠落',
       message: 'canonicalリンクが設定されていません',
       elements: [],
-      solution: 'canonicalリンクを追加して、正規URLを明示してください'
+      solution: 'canonicalリンクを追加して、正規URLを明示してください',
     });
   }
 
@@ -154,7 +159,9 @@ function checkDuplicateMetaElements() {
   const issues = [];
 
   // メタディスクリプションの重複チェック
-  const metaDescriptions = document.querySelectorAll('meta[name="description"]');
+  const metaDescriptions = document.querySelectorAll(
+    'meta[name="description"]'
+  );
   if (metaDescriptions.length > 1) {
     issues.push({
       category: 'seo',
@@ -163,7 +170,7 @@ function checkDuplicateMetaElements() {
       name: 'メタディスクリプションの重複',
       message: `${metaDescriptions.length}個のメタディスクリプションが存在します`,
       elements: Array.from(metaDescriptions),
-      solution: '重複するメタディスクリプションを削除し、1つだけ残してください'
+      solution: '重複するメタディスクリプションを削除し、1つだけ残してください',
     });
   }
 
@@ -176,7 +183,7 @@ function checkDuplicateMetaElements() {
       rule: 'duplicate_meta_keywords',
       name: 'メタキーワードの重複',
       message: `${metaKeywords.length}個のメタキーワードが存在します`,
-      elements: Array.from(metaKeywords)
+      elements: Array.from(metaKeywords),
     });
   }
 
@@ -190,7 +197,7 @@ function checkDuplicateMetaElements() {
       name: 'viewportメタタグの重複',
       message: `${viewports.length}個のviewportメタタグが存在します`,
       elements: Array.from(viewports),
-      solution: 'viewportメタタグは1つだけにしてください'
+      solution: 'viewportメタタグは1つだけにしてください',
     });
   }
 
@@ -205,7 +212,9 @@ function checkOpenGraph() {
   const issues = [];
 
   const ogTitle = document.querySelector('meta[property="og:title"]');
-  const ogDescription = document.querySelector('meta[property="og:description"]');
+  const ogDescription = document.querySelector(
+    'meta[property="og:description"]'
+  );
   const ogImage = document.querySelector('meta[property="og:image"]');
 
   // 基本的なOGタグの欠落チェック
@@ -217,7 +226,7 @@ function checkOpenGraph() {
       name: 'Open Graphタグの欠落',
       message: 'SNS共有用のOpen Graphタグが設定されていません',
       elements: [],
-      solution: getOpenGraphSolution()
+      solution: getOpenGraphSolution(),
     });
   } else {
     // 個別のOGタグチェック
@@ -228,7 +237,7 @@ function checkOpenGraph() {
         rule: 'missing_og_title',
         name: 'og:titleの欠落',
         message: 'og:titleが設定されていません',
-        elements: []
+        elements: [],
       });
     }
 
@@ -238,8 +247,9 @@ function checkOpenGraph() {
         severity: SEVERITY.WARNING,
         rule: 'missing_og_image',
         name: 'og:imageの欠落',
-        message: 'og:imageが設定されていません（SNS共有時に画像が表示されません）',
-        elements: []
+        message:
+          'og:imageが設定されていません（SNS共有時に画像が表示されません）',
+        elements: [],
       });
     }
   }

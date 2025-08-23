@@ -18,48 +18,71 @@ export function analyzeAccessibility(targetElements = null) {
       images: {
         total: targetElements.accessibility.images.length,
         withoutAlt: targetElements.accessibility.imagesWithoutAlt.length,
-        withEmptyAlt: targetElements.accessibility.images.filter(img => img.getAttribute('alt') === '').length
+        withEmptyAlt: targetElements.accessibility.images.filter(
+          img => img.getAttribute('alt') === ''
+        ).length,
       },
       links: {
         total: targetElements.accessibility.links.length,
-        withoutText: targetElements.accessibility.links.filter(link => !link.textContent.trim()).length,
-        withoutAriaLabel: targetElements.accessibility.links.filter(link => 
-          !link.hasAttribute('aria-label') && !link.hasAttribute('title')).length
+        withoutText: targetElements.accessibility.links.filter(
+          link => !link.textContent.trim()
+        ).length,
+        withoutAriaLabel: targetElements.accessibility.links.filter(
+          link =>
+            !link.hasAttribute('aria-label') && !link.hasAttribute('title')
+        ).length,
       },
       forms: {
-        inputs: targetElements.accessibility.formElements.filter(el => el.tagName === 'INPUT').length,
-        inputsWithoutLabels: targetElements.accessibility.formElements.filter(el => 
-          !el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')).length,
-        textareas: targetElements.accessibility.formElements.filter(el => el.tagName === 'TEXTAREA').length
+        inputs: targetElements.accessibility.formElements.filter(
+          el => el.tagName === 'INPUT'
+        ).length,
+        inputsWithoutLabels: targetElements.accessibility.formElements.filter(
+          el =>
+            !el.hasAttribute('aria-label') &&
+            !el.hasAttribute('aria-labelledby')
+        ).length,
+        textareas: targetElements.accessibility.formElements.filter(
+          el => el.tagName === 'TEXTAREA'
+        ).length,
       },
       landmarks: {
-        hasSkipLink: !!document.querySelector('a[href="#main"], a[href="#content"]'),
-        hasMainLandmark: document.querySelectorAll('main, [role="main"]').length > 0
-      }
+        hasSkipLink: !!document.querySelector(
+          'a[href="#main"], a[href="#content"]'
+        ),
+        hasMainLandmark:
+          document.querySelectorAll('main, [role="main"]').length > 0,
+      },
     };
   }
-  
+
   // フォールバック：従来の方式
   return {
     images: {
       total: document.querySelectorAll('img').length,
       withoutAlt: document.querySelectorAll('img:not([alt])').length,
-      withEmptyAlt: document.querySelectorAll('img[alt=""]').length
+      withEmptyAlt: document.querySelectorAll('img[alt=""]').length,
     },
     links: {
       total: document.querySelectorAll('a').length,
       withoutText: document.querySelectorAll('a:empty').length,
-      withoutAriaLabel: document.querySelectorAll('a:not([aria-label]):not([title])').length
+      withoutAriaLabel: document.querySelectorAll(
+        'a:not([aria-label]):not([title])'
+      ).length,
     },
     forms: {
       inputs: document.querySelectorAll('input').length,
-      inputsWithoutLabels: document.querySelectorAll('input:not([aria-label]):not([aria-labelledby])').length,
-      textareas: document.querySelectorAll('textarea').length
+      inputsWithoutLabels: document.querySelectorAll(
+        'input:not([aria-label]):not([aria-labelledby])'
+      ).length,
+      textareas: document.querySelectorAll('textarea').length,
     },
     landmarks: {
-      hasSkipLink: !!document.querySelector('a[href="#main"], a[href="#content"]'),
-      hasMainLandmark: document.querySelectorAll('main, [role="main"]').length > 0
-    }
+      hasSkipLink: !!document.querySelector(
+        'a[href="#main"], a[href="#content"]'
+      ),
+      hasMainLandmark:
+        document.querySelectorAll('main, [role="main"]').length > 0,
+    },
   };
 }
 
@@ -105,58 +128,74 @@ export function detectAccessibilityIssues(targetElements = null) {
  */
 function checkImageAltAttributes(targetElements = null) {
   const issues = [];
-  
-  // プリプロセス済み要素がある場合はそれを使用
-  const imagesWithoutAlt = targetElements ? 
-    targetElements.accessibility.imagesWithoutAlt : 
-    Array.from(document.querySelectorAll('img:not([alt])')).filter(img => !isExcludedElement(img));
-  
-  debugLog('Checker', 'Images without alt found:', imagesWithoutAlt.length);
-  
-  // トラッキングピクセルを除外（プリプロセス済みの場合は既に除外済み）
-  const filteredImages = targetElements ? 
-    imagesWithoutAlt.filter(img => {
-      // プリプロセス済みの場合は除外チェックは不要、トラッキングピクセルのみチェック
-      const src = img.src || img.getAttribute('src') || '';
-      const isTrackingUrl = TRACKING_PIXEL_PATTERNS.some(pattern => pattern.test(src));
-      
-      // サイズチェック（1x1ピクセル）
-      const is1x1Pixel = (img.width === 1 && img.height === 1) || 
-                        (img.naturalWidth === 1 && img.naturalHeight === 1) ||
-                        (img.getAttribute('width') === '1' && img.getAttribute('height') === '1');
-      
-      // 隠し要素チェック
-      const computedStyle = window.getComputedStyle(img);
-      const isHidden = computedStyle.display === 'none' || 
-                      computedStyle.visibility === 'hidden' ||
-                      img.style.display === 'none' ||
-                      img.style.visibility === 'hidden';
-      
-      return !isTrackingUrl && !is1x1Pixel && !isHidden;
-    }) :
-    imagesWithoutAlt.filter(img => {
-      // 従来の方式：すべてのチェックを実行
-    // URLチェック
-      const src = img.src || img.getAttribute('src') || '';
-      const isTrackingUrl = TRACKING_PIXEL_PATTERNS.some(pattern => pattern.test(src));
-    
-      // サイズチェック（1x1ピクセル）
-      const is1x1Pixel = (img.width === 1 && img.height === 1) || 
-                      (img.naturalWidth === 1 && img.naturalHeight === 1) ||
-                      (img.getAttribute('width') === '1' && img.getAttribute('height') === '1');
-    
-      // 隠し要素チェック
-      const computedStyle = window.getComputedStyle(img);
-      const isHidden = computedStyle.display === 'none' || 
-                    computedStyle.visibility === 'hidden' ||
-                    img.style.display === 'none' ||
-                    img.style.visibility === 'hidden';
-    
-      // トラッキングピクセルでない場合のみ含める
-      return !isTrackingUrl && !is1x1Pixel && !isHidden;
-    });
 
-  debugLog('Checker', 'After filtering tracking pixels:', filteredImages.length);
+  // プリプロセス済み要素がある場合はそれを使用
+  const imagesWithoutAlt = targetElements
+    ? targetElements.accessibility.imagesWithoutAlt
+    : Array.from(document.querySelectorAll('img:not([alt])')).filter(
+        img => !isExcludedElement(img)
+      );
+
+  debugLog('Checker', 'Images without alt found:', imagesWithoutAlt.length);
+
+  // トラッキングピクセルを除外（プリプロセス済みの場合は既に除外済み）
+  const filteredImages = targetElements
+    ? imagesWithoutAlt.filter(img => {
+        // プリプロセス済みの場合は除外チェックは不要、トラッキングピクセルのみチェック
+        const src = img.src || img.getAttribute('src') || '';
+        const isTrackingUrl = TRACKING_PIXEL_PATTERNS.some(pattern =>
+          pattern.test(src)
+        );
+
+        // サイズチェック（1x1ピクセル）
+        const is1x1Pixel =
+          (img.width === 1 && img.height === 1) ||
+          (img.naturalWidth === 1 && img.naturalHeight === 1) ||
+          (img.getAttribute('width') === '1' &&
+            img.getAttribute('height') === '1');
+
+        // 隠し要素チェック
+        const computedStyle = window.getComputedStyle(img);
+        const isHidden =
+          computedStyle.display === 'none' ||
+          computedStyle.visibility === 'hidden' ||
+          img.style.display === 'none' ||
+          img.style.visibility === 'hidden';
+
+        return !isTrackingUrl && !is1x1Pixel && !isHidden;
+      })
+    : imagesWithoutAlt.filter(img => {
+        // 従来の方式：すべてのチェックを実行
+        // URLチェック
+        const src = img.src || img.getAttribute('src') || '';
+        const isTrackingUrl = TRACKING_PIXEL_PATTERNS.some(pattern =>
+          pattern.test(src)
+        );
+
+        // サイズチェック（1x1ピクセル）
+        const is1x1Pixel =
+          (img.width === 1 && img.height === 1) ||
+          (img.naturalWidth === 1 && img.naturalHeight === 1) ||
+          (img.getAttribute('width') === '1' &&
+            img.getAttribute('height') === '1');
+
+        // 隠し要素チェック
+        const computedStyle = window.getComputedStyle(img);
+        const isHidden =
+          computedStyle.display === 'none' ||
+          computedStyle.visibility === 'hidden' ||
+          img.style.display === 'none' ||
+          img.style.visibility === 'hidden';
+
+        // トラッキングピクセルでない場合のみ含める
+        return !isTrackingUrl && !is1x1Pixel && !isHidden;
+      });
+
+  debugLog(
+    'Checker',
+    'After filtering tracking pixels:',
+    filteredImages.length
+  );
 
   if (filteredImages.length > 0) {
     issues.push({
@@ -166,7 +205,7 @@ function checkImageAltAttributes(targetElements = null) {
       name: '画像のalt属性欠落',
       message: `${filteredImages.length}個の画像にalt属性がありません。視覚障害のあるユーザーがスクリーンリーダーで画像の内容を理解できません。SEO的にも検索エンジンが画像を認識できません。`,
       elements: filteredImages,
-      solution: getAltAttributeSolution()
+      solution: getAltAttributeSolution(),
     });
   }
 
@@ -179,29 +218,39 @@ function checkImageAltAttributes(targetElements = null) {
  */
 function checkFormLabels() {
   const issues = [];
-  const formElements = document.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), select, textarea');
-  
+  const formElements = document.querySelectorAll(
+    'input:not([type="hidden"]):not([type="submit"]):not([type="button"]), select, textarea'
+  );
+
   const missingLabels = Array.from(formElements).filter(el => {
     // 除外対象要素を除外
     if (isExcludedElement(el)) {
       return false;
     }
-    const hasLabel = el.id && document.querySelector(`label[for="${el.id}"]`) !== null;
+    const hasLabel =
+      el.id && document.querySelector(`label[for="${el.id}"]`) !== null;
     const hasAriaLabel = el.hasAttribute('aria-label');
     const hasAriaLabelledby = el.hasAttribute('aria-labelledby');
     const hasPlaceholder = el.hasAttribute('placeholder');
     const hasTitle = el.hasAttribute('title');
-    
+
     // 検索フィールドなど、コンテキストが明確な要素を除外
-    const isSearchField = el.name === 'q' || 
-                         el.name === 'search' || 
-                         el.id?.includes('search') || 
-                         el.className?.includes('search');
-    
-    return !hasLabel && !hasAriaLabel && !hasAriaLabelledby && 
-           !hasPlaceholder && !hasTitle && !isSearchField;
+    const isSearchField =
+      el.name === 'q' ||
+      el.name === 'search' ||
+      el.id?.includes('search') ||
+      el.className?.includes('search');
+
+    return (
+      !hasLabel &&
+      !hasAriaLabel &&
+      !hasAriaLabelledby &&
+      !hasPlaceholder &&
+      !hasTitle &&
+      !isSearchField
+    );
   });
-  
+
   if (missingLabels.length > 0) {
     issues.push({
       category: 'accessibility',
@@ -210,7 +259,7 @@ function checkFormLabels() {
       name: 'フォーム要素のラベル不足',
       message: `${missingLabels.length}個のフォーム要素にアクセシブルなラベルがありません。`,
       elements: missingLabels,
-      solution: getFormLabelSolution()
+      solution: getFormLabelSolution(),
     });
   }
 
@@ -231,15 +280,17 @@ function checkAriaAttributes() {
     'details summary',
     '.dropdown-toggle',
     '.accordion-toggle',
-    '[aria-controls]'
+    '[aria-controls]',
   ];
-  
-  const expandableElements = document.querySelectorAll(expandableSelectors.join(', '));
+
+  const expandableElements = document.querySelectorAll(
+    expandableSelectors.join(', ')
+  );
   const missingAriaExpanded = Array.from(expandableElements).filter(el => {
     if (el.tagName === 'SUMMARY') return false; // details要素は除外
     return !el.hasAttribute('aria-expanded');
   });
-  
+
   if (missingAriaExpanded.length > 0) {
     issues.push({
       category: 'accessibility',
@@ -248,20 +299,22 @@ function checkAriaAttributes() {
       name: 'インタラクティブ要素のARIA展開状態不足',
       message: `${missingAriaExpanded.length}個のインタラクティブ要素にaria-expanded属性が不足しています`,
       elements: missingAriaExpanded,
-      solution: getAriaExpandedSolution()
+      solution: getAriaExpandedSolution(),
     });
   }
 
   // aria-currentチェック
-  const navigationLinks = document.querySelectorAll('nav a, .breadcrumb a, .pagination a');
+  const navigationLinks = document.querySelectorAll(
+    'nav a, .breadcrumb a, .pagination a'
+  );
   const missingAriaCurrent = Array.from(navigationLinks).filter(link => {
-    const hasActiveClass = link.classList.contains('active') || 
-                          link.classList.contains('current');
+    const hasActiveClass =
+      link.classList.contains('active') || link.classList.contains('current');
     const isSameUrl = link.href === window.location.href;
-    
+
     return (hasActiveClass || isSameUrl) && !link.hasAttribute('aria-current');
   });
-  
+
   if (missingAriaCurrent.length > 0) {
     issues.push({
       category: 'accessibility',
@@ -270,7 +323,7 @@ function checkAriaAttributes() {
       name: '現在位置のARIA属性不足',
       message: `${missingAriaCurrent.length}個のアクティブなナビゲーションリンクにaria-current属性が不足しています`,
       elements: missingAriaCurrent,
-      solution: getAriaCurrentSolution()
+      solution: getAriaCurrentSolution(),
     });
   }
 
@@ -293,40 +346,44 @@ function checkAriaRequired() {
     if (isExcludedElement(element)) {
       return;
     }
-    
+
     const role = element.getAttribute('role');
-    
+
     // roleに応じた必須属性をチェック
     switch (role) {
-    case 'button':
-      if (!element.hasAttribute('aria-label') && 
-            !element.hasAttribute('aria-labelledby') && 
-            !element.textContent.trim()) {
-        missingRequired.push(element);
-      }
-      break;
-    case 'tab':
-      if (!element.hasAttribute('aria-selected')) {
-        missingRequired.push(element);
-      }
-      break;
-    case 'tabpanel':
-      if (!element.hasAttribute('aria-labelledby')) {
-        missingRequired.push(element);
-      }
-      break;
-    case 'slider':
-      if (!element.hasAttribute('aria-valuenow') || 
-            !element.hasAttribute('aria-valuemin') || 
-            !element.hasAttribute('aria-valuemax')) {
-        missingRequired.push(element);
-      }
-      break;
-    case 'progressbar':
-      if (!element.hasAttribute('aria-valuenow')) {
-        missingRequired.push(element);
-      }
-      break;
+      case 'button':
+        if (
+          !element.hasAttribute('aria-label') &&
+          !element.hasAttribute('aria-labelledby') &&
+          !element.textContent.trim()
+        ) {
+          missingRequired.push(element);
+        }
+        break;
+      case 'tab':
+        if (!element.hasAttribute('aria-selected')) {
+          missingRequired.push(element);
+        }
+        break;
+      case 'tabpanel':
+        if (!element.hasAttribute('aria-labelledby')) {
+          missingRequired.push(element);
+        }
+        break;
+      case 'slider':
+        if (
+          !element.hasAttribute('aria-valuenow') ||
+          !element.hasAttribute('aria-valuemin') ||
+          !element.hasAttribute('aria-valuemax')
+        ) {
+          missingRequired.push(element);
+        }
+        break;
+      case 'progressbar':
+        if (!element.hasAttribute('aria-valuenow')) {
+          missingRequired.push(element);
+        }
+        break;
     }
   });
 
@@ -338,7 +395,7 @@ function checkAriaRequired() {
       name: '必須ARIA属性不足',
       message: `${missingRequired.length}個の要素に必須のARIA属性が不足しています。roleに応じた適切なARIA属性を設定してください。`,
       elements: missingRequired,
-      solution: getAriaRequiredSolution()
+      solution: getAriaRequiredSolution(),
     });
   }
 
@@ -405,34 +462,34 @@ roleに応じた必須属性:
  */
 function checkLinkAccessibility() {
   const issues = [];
-  
+
   // リンクのボタン化チェック（改善版）
   const problematicLinksSet = new Set();
   const links = document.querySelectorAll('a');
-  
+
   Array.from(links).forEach(link => {
     // 除外対象要素を除外
     if (isExcludedElement(link)) {
       return;
     }
-    
+
     const href = link.getAttribute('href');
     const onclick = link.getAttribute('onclick');
     const hasJSAction = onclick !== null || link.onclick !== null;
-    
+
     // 以下の場合は問題として検出
     // 1. href が空/# + JavaScriptアクションあり
     // 2. javascript:void(0) を使用（JavaScriptアクションの有無に関わらず）
     const isButtonMisuse = (!href || href === '#') && hasJSAction;
     const hasJSVoid = href === 'javascript:void(0)';
-    
+
     if (isButtonMisuse || hasJSVoid) {
       problematicLinksSet.add(link);
     }
   });
-  
+
   const problematicLinks = Array.from(problematicLinksSet);
-  
+
   if (problematicLinks.length > 0) {
     issues.push({
       category: 'accessibility',
@@ -441,7 +498,7 @@ function checkLinkAccessibility() {
       name: 'リンクのボタン化',
       message: `${problematicLinks.length}個のリンクがボタンとして誤用されています。href="#"やjavascript:void(0)を使用せず、適切な<button>タグまたは有効なURLを使用してください。`,
       elements: problematicLinks,
-      solution: getLinkButtonMisuseSolution()
+      solution: getLinkButtonMisuseSolution(),
     });
   }
 
@@ -648,19 +705,20 @@ CSS例:
 function checkLayoutTables() {
   const issues = [];
   const tables = document.querySelectorAll('table');
-  
+
   const layoutTables = Array.from(tables).filter(table => {
-    const hasLayoutIndicators = table.hasAttribute('cellpadding') || 
-                               table.hasAttribute('cellspacing') || 
-                               (table.hasAttribute('border') && table.getAttribute('border') === '0');
-    
+    const hasLayoutIndicators =
+      table.hasAttribute('cellpadding') ||
+      table.hasAttribute('cellspacing') ||
+      (table.hasAttribute('border') && table.getAttribute('border') === '0');
+
     const hasTableHeaders = table.querySelectorAll('th').length > 0;
     const hasCaption = table.querySelector('caption') !== null;
     const hasDataIndicators = hasTableHeaders || hasCaption;
-    
+
     return hasLayoutIndicators && !hasDataIndicators;
   });
-  
+
   if (layoutTables.length > 0) {
     issues.push({
       category: 'accessibility',
@@ -669,7 +727,7 @@ function checkLayoutTables() {
       name: 'レイアウト目的のtable使用',
       message: `${layoutTables.length}個のテーブルがレイアウト目的で使用されています`,
       elements: layoutTables,
-      solution: getLayoutTableSolution()
+      solution: getLayoutTableSolution(),
     });
   }
 

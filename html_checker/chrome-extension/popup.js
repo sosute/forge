@@ -1,5 +1,5 @@
 // Popup Script - Pure JavaScript (ES Modules不使用)
-(function() {
+(function () {
   'use strict';
 
   console.log('[Popup] Loading...');
@@ -34,7 +34,7 @@
    */
   function showResults(data) {
     console.log('[Popup] Showing results:', data);
-    
+
     const items = [
       { label: 'URL', value: data.url || '不明' },
       { label: 'タイトル', value: data.title || '不明' },
@@ -42,18 +42,30 @@
       { label: '見出し', value: data.statistics?.headings || 0 },
       { label: '画像', value: data.statistics?.images || 0 },
       { label: 'リンク', value: data.statistics?.links || 0 },
-      { label: 'セマンティック要素', value: Object.values(data.semantic || {}).reduce((a, b) => a + b, 0) },
+      {
+        label: 'セマンティック要素',
+        value: Object.values(data.semantic || {}).reduce((a, b) => a + b, 0),
+      },
       { label: 'H1の数', value: data.headingStructure?.h1Count || 0 },
-      { label: 'Alt属性なし画像', value: data.accessibility?.images?.withoutAlt || 0 },
-      { label: 'メタ説明', value: data.seo?.metaDescription?.exists ? '✓' : '✗' }
+      {
+        label: 'Alt属性なし画像',
+        value: data.accessibility?.images?.withoutAlt || 0,
+      },
+      {
+        label: 'メタ説明',
+        value: data.seo?.metaDescription?.exists ? '✓' : '✗',
+      },
     ];
 
-    const html = items.map(item => 
-      `<div class="result-item">
+    const html = items
+      .map(
+        item =>
+          `<div class="result-item">
         <span>${item.label}:</span>
         <span>${item.value}</span>
       </div>`
-    ).join('');
+      )
+      .join('');
 
     resultsDiv.innerHTML = html;
     resultsDiv.classList.add('show');
@@ -63,7 +75,10 @@
    * アクティブタブの取得
    */
   async function getActiveTab() {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
     return tab;
   }
 
@@ -72,17 +87,17 @@
    */
   async function startCheck() {
     if (isChecking) return;
-    
+
     try {
       isChecking = true;
       startCheckButton.textContent = 'チェック中...';
       startCheckButton.disabled = true;
-      
+
       showStatus('ページを分析中...', 'loading');
       resultsDiv.classList.remove('show');
 
       console.log('[Popup] Starting check...');
-      
+
       // アクティブタブを取得
       const tab = await getActiveTab();
       if (!tab?.id) {
@@ -96,18 +111,21 @@
         await chrome.tabs.sendMessage(tab.id, { type: 'PING' });
       } catch (pingError) {
         console.log('[Popup] Content script not found, injecting...');
-        
+
         // Content Scriptを手動で注入
         try {
           await chrome.scripting.executeScript({
             target: { tabId: tab.id },
-            files: ['content-script.js']
+            files: ['content-script.js'],
           });
-          
+
           // 少し待ってから再試行
           await new Promise(resolve => setTimeout(resolve, 500));
         } catch (injectError) {
-          console.error('[Popup] Failed to inject content script:', injectError);
+          console.error(
+            '[Popup] Failed to inject content script:',
+            injectError
+          );
           throw new Error('Content Scriptの注入に失敗しました');
         }
       }
@@ -115,7 +133,7 @@
       // Content Scriptにメッセージを送信
       const response = await chrome.tabs.sendMessage(tab.id, {
         type: 'START_CHECK',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
 
       console.log('[Popup] Response from content script:', response);
@@ -126,11 +144,10 @@
       } else {
         throw new Error(response?.error || 'チェックに失敗しました');
       }
-
     } catch (error) {
       console.error('[Popup] Check failed:', error);
       showStatus(`エラー: ${error.message}`, 'error');
-      
+
       // エラーが Content Script 未読み込みの場合の対処
       if (error.message.includes('Could not establish connection')) {
         showStatus('拡張機能を再読み込みしてから再試行してください', 'error');
@@ -162,10 +179,10 @@
    */
   function initialize() {
     console.log('[Popup] Initializing...');
-    
+
     initializeEventListeners();
     hideStatus();
-    
+
     console.log('[Popup] Ready');
   }
 
@@ -175,5 +192,4 @@
   } else {
     initialize();
   }
-
 })();

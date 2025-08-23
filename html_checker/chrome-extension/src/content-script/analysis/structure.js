@@ -19,7 +19,7 @@ export function analyzeStructure() {
       hasFooter: document.querySelector('footer') !== null,
       hasArticle: document.querySelector('article') !== null,
       hasSection: document.querySelector('section') !== null,
-      hasAside: document.querySelector('aside') !== null
+      hasAside: document.querySelector('aside') !== null,
     },
     // 装飾要素の使用状況
     presentationalTags: countPresentationalTags(),
@@ -28,7 +28,7 @@ export function analyzeStructure() {
     // idの重複チェック
     duplicateIds: findDuplicateIds().length,
     // セマンティックスコア
-    semanticScore: calculateSemanticScore()
+    semanticScore: calculateSemanticScore(),
   };
 }
 
@@ -77,9 +77,10 @@ function checkMissingSemanticElements() {
       severity: SEVERITY.WARNING,
       rule: 'missing_main',
       name: 'main要素の欠落',
-      message: 'ページにmain要素がありません。メインコンテンツをmain要素で囲むことを推奨します。',
+      message:
+        'ページにmain要素がありません。メインコンテンツをmain要素で囲むことを推奨します。',
       elements: [],
-      solution: getMainElementSolution()
+      solution: getMainElementSolution(),
     });
   } else if (mainElements.length > 1) {
     issues.push({
@@ -88,7 +89,7 @@ function checkMissingSemanticElements() {
       rule: 'multiple_main',
       name: 'main要素の重複',
       message: `${mainElements.length}個のmain要素が存在します。1ページに1つのmain要素のみ使用してください。`,
-      elements: Array.from(mainElements)
+      elements: Array.from(mainElements),
     });
   }
 
@@ -100,14 +101,16 @@ function checkMissingSemanticElements() {
       rule: 'missing_header',
       name: 'header要素の欠落',
       message: 'ページヘッダー部分にheader要素の使用を推奨します。',
-      elements: []
+      elements: [],
     });
   }
 
   // nav要素チェック
-  const navigationLists = document.querySelectorAll('ul.nav, ul.navigation, div.nav, div.navigation');
+  const navigationLists = document.querySelectorAll(
+    'ul.nav, ul.navigation, div.nav, div.navigation'
+  );
   const hasNav = document.querySelector('nav') !== null;
-  
+
   if (!hasNav && navigationLists.length > 0) {
     issues.push({
       category: 'structure',
@@ -115,7 +118,7 @@ function checkMissingSemanticElements() {
       rule: 'missing_nav',
       name: 'nav要素の欠落',
       message: 'ナビゲーションメニューにnav要素の使用を推奨します。',
-      elements: Array.from(navigationLists)
+      elements: Array.from(navigationLists),
     });
   }
 
@@ -145,7 +148,7 @@ function checkPresentationalTags() {
       name: '装飾用HTMLタグの使用',
       message: `${presentationalElements.length}個の装飾用HTMLタグが使用されています。CSSでスタイリングすることを推奨します。`,
       elements: presentationalElements,
-      solution: getPresentationalTagSolution()
+      solution: getPresentationalTagSolution(),
     });
   }
 
@@ -159,12 +162,16 @@ function checkPresentationalTags() {
 function checkInlineStyles() {
   const issues = [];
   const elementsWithInlineStyles = document.querySelectorAll('[style]');
-  
+
   // SVGやcanvas要素を除外
   const filteredElements = Array.from(elementsWithInlineStyles).filter(el => {
     const tagName = el.tagName.toLowerCase();
-    return tagName !== 'svg' && tagName !== 'canvas' && 
-           !el.closest('svg') && tagName !== 'img';
+    return (
+      tagName !== 'svg' &&
+      tagName !== 'canvas' &&
+      !el.closest('svg') &&
+      tagName !== 'img'
+    );
   });
 
   if (filteredElements.length > 10) {
@@ -175,7 +182,7 @@ function checkInlineStyles() {
       name: '過度なインラインスタイルの使用',
       message: `${filteredElements.length}個の要素でインラインスタイルが使用されています。外部CSSの使用を推奨します。`,
       elements: filteredElements.slice(0, 10), // 最初の10個のみ表示
-      solution: getInlineStyleSolution()
+      solution: getInlineStyleSolution(),
     });
   }
 
@@ -190,7 +197,7 @@ function checkDuplicateIds() {
   const issues = [];
   const duplicates = findDuplicateIds();
 
-  duplicates.forEach(({id, elements}) => {
+  duplicates.forEach(({ id, elements }) => {
     issues.push({
       category: 'structure',
       severity: SEVERITY.ERROR,
@@ -198,7 +205,8 @@ function checkDuplicateIds() {
       name: 'IDの重複',
       message: `ID "${id}" が${elements.length}個の要素で重複しています。`,
       elements: elements,
-      solution: '各要素に一意のIDを割り当ててください。同じスタイルを適用する場合はclassを使用してください。'
+      solution:
+        '各要素に一意のIDを割り当ててください。同じスタイルを適用する場合はclassを使用してください。',
     });
   });
 
@@ -211,14 +219,17 @@ function checkDuplicateIds() {
  */
 function checkEmptyElements() {
   const issues = [];
-  
+
   // 空のdiv/span要素
-  const emptyContainers = Array.from(document.querySelectorAll('div, span')).filter(el => {
+  const emptyContainers = Array.from(
+    document.querySelectorAll('div, span')
+  ).filter(el => {
     const hasText = el.textContent.trim().length > 0;
     const hasChildren = el.children.length > 0;
-    const hasBackground = window.getComputedStyle(el).backgroundImage !== 'none';
+    const hasBackground =
+      window.getComputedStyle(el).backgroundImage !== 'none';
     const hasPseudoContent = hasPseudoElement(el);
-    
+
     return !hasText && !hasChildren && !hasBackground && !hasPseudoContent;
   });
 
@@ -229,7 +240,7 @@ function checkEmptyElements() {
       rule: 'empty_elements',
       name: '空の要素',
       message: `${emptyContainers.length}個の空のdiv/span要素が存在します。`,
-      elements: emptyContainers.slice(0, 5) // 最初の5個のみ表示
+      elements: emptyContainers.slice(0, 5), // 最初の5個のみ表示
     });
   }
 
@@ -281,9 +292,17 @@ function findDuplicateIds() {
  */
 function calculateSemanticScore() {
   let score = 100;
-  
+
   // セマンティック要素の使用でボーナス
-  const semanticElements = ['header', 'nav', 'main', 'article', 'section', 'aside', 'footer'];
+  const semanticElements = [
+    'header',
+    'nav',
+    'main',
+    'article',
+    'section',
+    'aside',
+    'footer',
+  ];
   semanticElements.forEach(tag => {
     if (document.querySelector(tag)) {
       score += 5;
@@ -313,9 +332,11 @@ function calculateSemanticScore() {
 function hasPseudoElement(element) {
   const beforeContent = window.getComputedStyle(element, ':before').content;
   const afterContent = window.getComputedStyle(element, ':after').content;
-  
-  return (beforeContent !== 'none' && beforeContent !== '') ||
-         (afterContent !== 'none' && afterContent !== '');
+
+  return (
+    (beforeContent !== 'none' && beforeContent !== '') ||
+    (afterContent !== 'none' && afterContent !== '')
+  );
 }
 
 /**

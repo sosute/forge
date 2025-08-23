@@ -17,7 +17,7 @@ export function initializeDrawer() {
     debugLog('Drawer', 'Drawer already initialized');
     return;
   }
-  
+
   createDrawerElement();
   attachDrawerEvents();
   debugLog('Drawer', 'Drawer initialized');
@@ -30,7 +30,7 @@ function createDrawerElement() {
   drawerElement = document.createElement('div');
   drawerElement.id = 'html-semantic-checker-drawer';
   drawerElement.innerHTML = getDrawerHTML();
-  
+
   // ドロワーのスタイルを追加
   if (!document.getElementById('html-semantic-checker-styles')) {
     const styleElement = document.createElement('style');
@@ -38,7 +38,7 @@ function createDrawerElement() {
     styleElement.textContent = getDrawerStyles();
     document.head.appendChild(styleElement);
   }
-  
+
   document.body.appendChild(drawerElement);
 }
 
@@ -531,19 +531,17 @@ function attachDrawerEvents() {
   // 閉じるボタン
   const closeBtn = drawerElement.querySelector('.hsc-close-btn');
   closeBtn.addEventListener('click', closeDrawer);
-  
+
   // オーバーレイクリック
   const overlay = drawerElement.querySelector('.hsc-drawer-overlay');
   overlay.addEventListener('click', closeDrawer);
-  
-  
+
   // フィルター
   const categoryFilter = drawerElement.querySelector('#hsc-category-filter');
   const severityFilter = drawerElement.querySelector('#hsc-severity-filter');
-  
+
   categoryFilter.addEventListener('change', filterIssues);
   severityFilter.addEventListener('change', filterIssues);
-  
 }
 
 /**
@@ -553,7 +551,7 @@ export function openDrawer() {
   if (!drawerElement) {
     initializeDrawer();
   }
-  
+
   drawerElement.classList.add('open');
   debugLog('Drawer', 'Drawer opened');
 }
@@ -573,24 +571,22 @@ export function closeDrawer() {
  * @param {Object} results - 分析結果
  */
 export function displayResultsInDrawer(results) {
-  
   if (!drawerElement) {
     initializeDrawer();
   }
-  
+
   // ローディングを隠し、結果を表示
   const loading = drawerElement.querySelector('.hsc-loading');
   const resultsDiv = drawerElement.querySelector('.hsc-results');
-  
+
   loading.style.display = 'none';
   resultsDiv.style.display = 'flex';
-  
-  
+
   // 問題リストを更新
   updateIssuesList(results.issues);
-  
+
   // タブシステムを削除したため、概要・構造タブの更新は不要
-  
+
   openDrawer();
 }
 
@@ -600,15 +596,16 @@ export function displayResultsInDrawer(results) {
  */
 function updateIssuesList(issues) {
   const issuesList = drawerElement.querySelector('.hsc-issues-list');
-  
+
   if (issues.length === 0) {
-    issuesList.innerHTML = '<p class="hsc-no-issues">問題は見つかりませんでした。</p>';
+    issuesList.innerHTML =
+      '<p class="hsc-no-issues">問題は見つかりませんでした。</p>';
     return;
   }
-  
+
   // 問題をグループ化
   const groupedIssues = groupIssuesByName(issues);
-  
+
   issuesList.innerHTML = '';
   Object.entries(groupedIssues).forEach(([name, issueGroup]) => {
     const issueElement = createIssueElement(name, issueGroup);
@@ -623,13 +620,13 @@ function updateIssuesList(issues) {
  */
 function groupIssuesByName(issues) {
   const grouped = {};
-  
+
   issues.forEach(issue => {
     if (!grouped[issue.name]) {
       grouped[issue.name] = {
         ...issue,
         count: 0,
-        allElements: []
+        allElements: [],
       };
     }
     grouped[issue.name].count += issue.elements ? issue.elements.length : 1;
@@ -637,7 +634,7 @@ function groupIssuesByName(issues) {
       grouped[issue.name].allElements.push(...issue.elements);
     }
   });
-  
+
   return grouped;
 }
 
@@ -652,7 +649,7 @@ function createIssueElement(name, issue) {
   div.className = 'hsc-issue-item';
   div.dataset.category = issue.category;
   div.dataset.severity = issue.severity;
-  
+
   // 関連要素の詳細リストを作成（すべて表示）
   let elementsListHTML = '';
   if (issue.allElements && issue.allElements.length > 0) {
@@ -660,22 +657,24 @@ function createIssueElement(name, issue) {
       <div class="hsc-issue-elements">
         <h4>関連要素 (${issue.allElements.length}個):</h4>
         <ul class="hsc-elements-list">
-          ${issue.allElements.map((element, index) => {
-    // 元の詳細な要素表示を使用
-    const elementDetails = getElementDetails(element);
-    const isNonVisible = isNonVisibleElement(element);
-            
-    return `
+          ${issue.allElements
+            .map((element, index) => {
+              // 元の詳細な要素表示を使用
+              const elementDetails = getElementDetails(element);
+              const isNonVisible = isNonVisibleElement(element);
+
+              return `
               <li class="hsc-element-item ${isNonVisible ? 'non-visible' : ''}" data-element-index="${index}" ${isNonVisible ? 'data-non-visible="true"' : ''}>
                 <div class="hsc-element-tag">${escapeHtml(elementDetails)}</div>
               </li>
             `;
-  }).join('')}
+            })
+            .join('')}
         </ul>
       </div>
     `;
   }
-  
+
   // 解決策をHTMLとして適切にフォーマット
   let solutionHTML = '';
   if (issue.solution) {
@@ -687,7 +686,7 @@ function createIssueElement(name, issue) {
       </div>
     `;
   }
-  
+
   div.innerHTML = `
     <div class="hsc-issue-header">
       <div class="hsc-issue-severity ${issue.severity}"></div>
@@ -702,41 +701,40 @@ function createIssueElement(name, issue) {
       ${solutionHTML}
     </div>
   `;
-  
+
   // 初期状態は閉じた状態
-  
+
   // クリックで詳細を表示/非表示
   const header = div.querySelector('.hsc-issue-header');
   header.addEventListener('click', () => {
     const wasExpanded = div.classList.contains('expanded');
     div.classList.toggle('expanded');
-    
+
     const expandIcon = div.querySelector('.hsc-expand-icon');
     expandIcon.textContent = div.classList.contains('expanded') ? '▲' : '▼';
-    
+
     // 要素をハイライト（展開時のみ、既存のハイライトは維持）
     if (!wasExpanded && issue.allElements && issue.allElements.length > 0) {
       highlightElements(issue.allElements);
     }
     // 閉じる時はハイライトを維持（変更前の動作に合わせる）
   });
-  
-  
+
   // 個別要素のクリック処理（後でイベントリスナーを追加）
   setTimeout(() => {
     const elementItems = div.querySelectorAll('.hsc-element-item');
     elementItems.forEach((item, index) => {
-      item.addEventListener('click', (e) => {
+      item.addEventListener('click', e => {
         e.stopPropagation();
-        
+
         // 非表示要素はクリックを無効化
         if (item.dataset.nonVisible === 'true') {
           debugLog('Drawer', `Non-visible element clicked, ignoring: ${index}`);
           return;
         }
-        
+
         debugLog('Drawer', `Element item ${index} clicked`);
-        
+
         if (issue.allElements && issue.allElements[index]) {
           debugLog('Drawer', 'Selecting element:', issue.allElements[index]);
           // 直接ハイライト関数を呼び出し
@@ -747,33 +745,35 @@ function createIssueElement(name, issue) {
       });
     });
   }, 0);
-  
+
   return div;
 }
-
 
 /**
  * 問題をフィルタリング
  */
 function filterIssues() {
-  const categoryFilter = drawerElement.querySelector('#hsc-category-filter').value;
-  const severityFilter = drawerElement.querySelector('#hsc-severity-filter').value;
-  
+  const categoryFilter = drawerElement.querySelector(
+    '#hsc-category-filter'
+  ).value;
+  const severityFilter = drawerElement.querySelector(
+    '#hsc-severity-filter'
+  ).value;
+
   const issueItems = drawerElement.querySelectorAll('.hsc-issue-item');
-  
+
   issueItems.forEach(item => {
     const category = item.dataset.category;
     const severity = item.dataset.severity;
-    
-    const categoryMatch = categoryFilter === 'all' || category === categoryFilter;
-    const severityMatch = severityFilter === 'all' || severity === severityFilter;
-    
+
+    const categoryMatch =
+      categoryFilter === 'all' || category === categoryFilter;
+    const severityMatch =
+      severityFilter === 'all' || severity === severityFilter;
+
     item.style.display = categoryMatch && severityMatch ? 'block' : 'none';
   });
 }
-
-
-
 
 /**
  * HTMLエスケープ（改行保持）
@@ -787,7 +787,6 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-
 /**
  * 解決策をシンプルなUIフォーマットに変換
  * @param {string} text - 解決策テキスト
@@ -795,14 +794,14 @@ function escapeHtml(text) {
  */
 function formatSolutionForUI(text) {
   if (!text) return '';
-  
+
   // シンプルなフォーマット化
   const sections = text.split(/\n\s*\n/).filter(s => s.trim());
   let html = '<div class="hsc-solution-content">';
-  
+
   sections.forEach(section => {
     const lines = section.trim().split('\n');
-    
+
     // コードブロックの検出
     if (section.includes('<') && section.includes('>')) {
       html += `<div class="hsc-code-example">${escapeHtml(section)}</div>`;
@@ -817,7 +816,12 @@ function formatSolutionForUI(text) {
     else {
       html += '<div class="hsc-solution-section">';
       // 最初の行がタイトルの可能性
-      if (lines.length > 1 && (lines[0].includes('：') || lines[0].includes('設定') || lines[0].includes('方法'))) {
+      if (
+        lines.length > 1 &&
+        (lines[0].includes('：') ||
+          lines[0].includes('設定') ||
+          lines[0].includes('方法'))
+      ) {
         html += `<h4 class="hsc-solution-title">${escapeHtml(lines[0])}</h4>`;
         html += `<div class="hsc-solution-text">${escapeHtml(lines.slice(1).join('\n'))}</div>`;
       } else {
@@ -826,8 +830,7 @@ function formatSolutionForUI(text) {
       html += '</div>';
     }
   });
-  
+
   html += '</div>';
   return html;
 }
-
