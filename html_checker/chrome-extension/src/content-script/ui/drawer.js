@@ -359,6 +359,7 @@ function getDrawerStyles() {
       list-style: none;
       padding: 0;
       margin: 0 0 20px 0;
+      overflow: hidden;
     }
 
     .hsc-element-item {
@@ -369,6 +370,8 @@ function getDrawerStyles() {
       margin-bottom: 8px;
       cursor: pointer;
       transition: all 0.2s;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
 
     .hsc-element-item:hover {
