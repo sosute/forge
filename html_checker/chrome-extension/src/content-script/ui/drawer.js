@@ -51,6 +51,7 @@ function getDrawerHTML() {
     <div class="hsc-drawer-overlay"></div>
     <div class="hsc-drawer-panel">
       <div class="hsc-drawer-header">
+        <h2 class="hsc-drawer-title">HTML Checker</h2>
         <button class="hsc-close-btn" title="閉じる">×</button>
       </div>
       
@@ -155,11 +156,17 @@ function getDrawerStyles() {
       color: white;
       border-bottom: 1px solid #e1e5e9;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
     }
 
+    .hsc-drawer-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+    }
 
     .hsc-close-btn {
       background: none;
