@@ -15,10 +15,12 @@
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
-    "webpack": "^5.101.2",
-    "webpack-cli": "^5.1.4",
     "eslint": "^8.57.0",
-    "prettier": "^3.0.0"
+    "jest": "^30.1.1",
+    "jest-environment-jsdom": "^30.1.1",
+    "prettier": "^3.0.0",
+    "webpack": "^5.101.2",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@babel/core": "^7.28.3",

@@ -1,6 +1,17 @@
 # Claude Code and Serena specific directories
-.claude/
 .serena/
+
+# Claude project settings (selective Git management)
+.claude/settings.local.json
+.claude/personal/
+.claude/logs/
+.claude/*.local.*
+
+# Allow team-shared configurations
+!.claude/
+!.claude/agents/
+!.claude/commands/
+!.claude/templates/
 
 # Dependencies
 node_modules/

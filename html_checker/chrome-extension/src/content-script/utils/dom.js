@@ -167,6 +167,21 @@ function formatHTML(html) {
 }
 
 /**
+ * HTMLタグをサニタイズ（< と > をエスケープ）
+ * @param {*} input - サニタイズ対象の入力
+ * @returns {string} サニタイズされた文字列
+ */
+export function sanitizeHtmlTags(input) {
+  if (input === null || input === undefined) {
+    return '';
+  }
+  
+  return String(input)
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/**
  * 要素の詳細情報を取得（元の実装を完全復元）
  * @param {Element} element - 対象要素
  * @returns {string} 要素の詳細情報

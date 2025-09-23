@@ -1,0 +1,34 @@
+# Gentle cleaning configuration for preserving more data
+
+# データクリーニング設定（穏やか設定）
+cleaning:
+  remove_nan: true                    # NaN値を空セルに変換（維持）
+  remove_unnamed_columns: false       # Unnamed列を保持（重要な変更）
+  format_numbers: false               # 数値フォーマット無効
+  empty_cell_threshold: 0.95          # 空セル率閾値を緩和（95%空の行のみ削除）
+  preserve_formulas: true             # 数式保持
+  normalize_whitespace: false         # 空白文字正規化無効
+
+# 出力設定
+output:
+  add_metadata: true                 # メタデータヘッダー追加
+  include_statistics: true           # データ統計情報
+  add_quality_score: true            # データ品質スコア
+  sheet_separator: "\n\n---\n\n"     # シート間区切り
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+
+# AI支援設定
+ai_enhancement:
+  enabled: false                     # AI機能無効
+  auto_descriptions: false           # 自動説明文生成無効
+  data_insights: false               # データ洞察生成無効
+  claude_integration: false          # Claude Code統合無効
+  enhancement_level: "basic"
+
+# 処理設定
+processing:
+  parallel_processing: true          # 並列処理有効化
+  max_workers: 4                     # 最大ワーカー数
+  chunk_size: 1000                   # チャンクサイズ
+  memory_limit_mb: 1024              # メモリ制限を拡大（MB）
+  timeout_seconds: 600               # タイムアウトを延長（秒）

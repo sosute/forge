@@ -1,0 +1,35 @@
+# Excel Markdown Reformatter - Default Configuration
+
+# データクリーニング設定
+cleaning:
+  remove_nan: true                    # NaN値を空セルに変換
+  remove_unnamed_columns: true        # Unnamed列を削除
+  format_numbers: true                # 数値フォーマット（.0削除など）
+  empty_cell_threshold: 0.8          # 空セル率閾値（行削除判定）
+  preserve_formulas: false           # 数式保持（Excel関数など）
+  normalize_whitespace: true         # 空白文字正規化
+
+# 出力設定
+output:
+  add_metadata: true                 # メタデータヘッダー追加
+  create_toc: true                   # 目次作成
+  sheet_separator: "\n\n---\n\n"     # シート間区切り
+  include_statistics: true           # データ統計情報
+  add_quality_score: true            # データ品質スコア
+  timestamp_format: "%Y-%m-%d %H:%M:%S"  # タイムスタンプ形式
+
+# AI支援設定
+ai_enhancement:
+  enabled: false                     # AI機能有効化
+  auto_descriptions: false           # 自動説明文生成
+  data_insights: false               # データ洞察生成
+  claude_integration: false          # Claude Code統合
+  enhancement_level: "basic"         # basic, standard, comprehensive
+
+# 処理設定
+processing:
+  parallel_processing: true          # 並列処理有効化
+  max_workers: 4                     # 最大ワーカー数
+  chunk_size: 1000                   # チャンクサイズ（行単位）
+  memory_limit_mb: 512               # メモリ制限（MB）
+  timeout_seconds: 300               # タイムアウト（秒）

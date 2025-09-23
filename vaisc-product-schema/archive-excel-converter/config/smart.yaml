@@ -1,0 +1,34 @@
+# Smart cleaning configuration for AI readability
+
+# データクリーニング設定（賢い設定）
+cleaning:
+  remove_nan: true                    # NaN値を空セルに変換
+  remove_unnamed_columns: true        # Unnamed列を削除（重要列のみ保持）
+  format_numbers: true                # 数値フォーマット
+  empty_cell_threshold: 0.7           # 70%以上空の行を削除
+  preserve_formulas: false            # 数式は削除
+  normalize_whitespace: true          # 空白文字正規化
+
+# 出力設定
+output:
+  add_metadata: true                 # メタデータヘッダー追加
+  include_statistics: true           # データ統計情報
+  add_quality_score: true            # データ品質スコア
+  create_toc: false                  # 目次は無効（単一シート）
+  sheet_separator: "\n\n---\n\n"
+
+# AI支援設定
+ai_enhancement:
+  enabled: false
+  auto_descriptions: false
+  data_insights: false
+  claude_integration: false
+  enhancement_level: "basic"
+
+# 処理設定
+processing:
+  parallel_processing: true
+  max_workers: 4
+  chunk_size: 500                    # チャンクサイズを小さく
+  memory_limit_mb: 1024
+  timeout_seconds: 600
