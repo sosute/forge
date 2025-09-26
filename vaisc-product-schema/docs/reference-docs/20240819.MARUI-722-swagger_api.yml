@@ -1,0 +1,3231 @@
+openapi: 3.0.0
+
+info:
+  title: Standard SpringBoot API Samples
+  description: SpringBoot標準化サンプルAPI
+  version: 1.0.0
+
+servers:
+  - url: https://{host}:{port}
+    description: 開発用
+    variables:
+      host:
+        default: localhost
+      port:
+        default: "9000"
+
+paths:
+  /api/search:
+    get:
+      tags:
+        - search
+      operationId: getSearchApiResponse
+      summary: サーチレスポンス情報取得
+      parameters:
+        # サーチコアパラメータ（変更したら menu, itemcategory, shopbrand, searchtotal, rankingも変更する）
+        - $ref: "#/components/parameters/FactorParam"
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FreewordParam"
+        - $ref: "#/components/parameters/AdditionalWordParam"
+        - $ref: "#/components/parameters/ExcludingWordParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/BulkDiscountParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/FullColorParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+        # サーチ専用パラメータ
+        - $ref: "#/components/parameters/SortParam"
+        - $ref: "#/components/parameters/SecretSaleParam"
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PerParam"
+        - $ref: "#/components/parameters/ForceFreeword"
+      responses:
+        200:
+          description: サーチレスポンス情報取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/menu:
+    get:
+      tags:
+        - menu
+      operationId: getMenuApiResponse
+      summary: メニューレスポンス情報取得
+      parameters:
+        - $ref: "#/components/parameters/FactorParam"
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FreewordParam"
+        - $ref: "#/components/parameters/ExcludingWordParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/BulkDiscountParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/FullColorParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+        - $ref: "#/components/parameters/SecretSaleParam"
+      responses:
+        200:
+          description: メニューレスポンス情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MenuResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/scdrecommendation:
+    get:
+      tags:
+        - scdRecommendation
+      operationId: getScdRecommendationApiResponse
+      summary: 検索結果のしたに出る「このショップの人気アイテム」などのおすすめscdの情報取得
+      parameters:
+        - $ref: "#/components/parameters/FactorParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+      responses:
+        200:
+          description: scdRecommendation情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScdRecommendationResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/mysize:
+    get:
+      tags:
+        - mysize
+      operationId: getMysizeApiResponse
+      summary: あなたサイズ取得
+      responses:
+        200:
+          description: メニューレスポンス情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MySizeResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/itemcategory:
+    get:
+      tags:
+        - itemCategory
+      operationId: getItemCategoryApiResponse
+      summary: アイテムカテゴリレスポンス情報取得(fcd, scd一覧)
+      description: |
+        fcdとscdのパラメーターによるレスポンス変化
+        * fcdだけ指定されていればscd情報を返す
+        * scdだけ指定されていれば紐ずくfcd情報を返す
+        * fcdとscdも指定されていなければfcd情報を返す
+        * fcdとscdも指定されていればエラーを返す
+      parameters:
+        # factor以外にサーチパラメータと一緒
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/BulkDiscountParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+      responses:
+        200:
+          description: アイテムカテゴリレスポンス情報取得(fcd, scd一覧)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemCategoryResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/shopbrand:
+    get:
+      tags:
+        - shopBrand
+      operationId: getShopBrandApiResponse
+      summary: ショップブランドレスポンス情報取得。
+      description: |
+        ショップとブランドが同じ日本語名で同じ件数を持つ場合、ショップを優先してブランドの情報を返しません。
+      parameters:
+        # factor以外にサーチパラメータと一緒
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/BulkDiscountParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+
+        - $ref: "#/components/parameters/GetBrandParam"
+        - $ref: "#/components/parameters/GetShopParam"
+        - $ref: "#/components/parameters/FirstLetterParam"
+        - $ref: "#/components/parameters/RentalBrandParam"
+      responses:
+        200:
+          description: ショップブランドレスポンス情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShopBrandResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/suggest:
+    get:
+      tags:
+        - suggest
+      operationId: suggestApiResponse
+      summary: サジェストワード情報
+      parameters:
+        - $ref: "#/components/parameters/WordParam"
+      responses:
+        200:
+          description: サジェストワードレスポンス取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuggestResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/trendword:
+    get:
+      tags:
+        - trendword
+      operationId: trendwordApiResponse
+      summary: トレンドワード情報
+      parameters:
+        - $ref: "#/components/parameters/TrendwordCountParam"
+        - $ref: "#/components/parameters/TrendwordOffsetParam"
+        - $ref: "#/components/parameters/TrendwordPeriodParam"
+        - $ref: "#/components/parameters/TrendwordSortParam"
+      responses:
+        200:
+          description: トレンドワードレスポンス取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrendwordResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/searchtotal:
+    get:
+      tags:
+        - searchTotal
+      operationId: searchTotalApiResponse
+      summary: 検索結果総件数
+      parameters:
+        # サーチパラメータと一緒
+        - $ref: "#/components/parameters/FactorParam"
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FreewordParam"
+        - $ref: "#/components/parameters/AdditionalWordParam"
+        - $ref: "#/components/parameters/ExcludingWordParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/BulkDiscountParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+      responses:
+        200:
+          description: 検索結果総件数情報取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchTotalResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/ranking:
+    get:
+      tags:
+        - ranking
+      operationId: rankingApiResponse
+      summary: ランキング情報取得
+      parameters:
+        # factor以外にサーチパラメータと一緒
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/BulkDiscountParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/SecretSaleParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+
+        #ranking unique params
+        - $ref: "#/components/parameters/CountParam"
+        - $ref: "#/components/parameters/RankingSortParam"
+        - $ref: "#/components/parameters/PeriodParam"
+        - $ref: "#/components/parameters/TypeParam"
+        - $ref: "#/components/parameters/GroupParam"
+        - $ref: "#/components/parameters/GroupSortParam"
+        - $ref: "#/components/parameters/GroupTypeParam"
+        - $ref: "#/components/parameters/GroupCountParam"
+      responses:
+        200:
+          description: ランキング情報取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RankingResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/productdetail:
+    get:
+      tags:
+        - productDetail
+      operationId: productDetailResponse
+      summary: アプリ用商品詳細情報
+      parameters:
+        - $ref: "#/components/parameters/ProductIdParam"
+        - $ref: "#/components/parameters/ColorBallParam"
+        - $ref: "#/components/parameters/DispDreniParam"
+      responses:
+        200:
+          description: アプリ用商品詳細情報取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailProductList"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/colorvariation:
+    get:
+      tags:
+        - colorVariation
+      operationId: colorVariationResponse
+      summary: カラーバリエーション取得
+      parameters:
+        - $ref: "#/components/parameters/ProductIdParam"
+      responses:
+        200:
+          description: カラーバリエーション取得
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ColorVariationResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/seo:
+    get:
+      tags:
+        - seo
+      operationId: getSeoApiResponse
+      summary: SEO情報レスポンス情報取得
+      parameters:
+        - $ref: "#/components/parameters/FactorParam"
+        - $ref: "#/components/parameters/StoreParam"
+        - $ref: "#/components/parameters/FigureParam"
+        - $ref: "#/components/parameters/BrandParam"
+        - $ref: "#/components/parameters/FirstItemParam"
+        - $ref: "#/components/parameters/SecondItemParam"
+        - $ref: "#/components/parameters/ShopParam"
+        - $ref: "#/components/parameters/WebShopParam"
+        - $ref: "#/components/parameters/FreewordParam"
+        - $ref: "#/components/parameters/FloorParam"
+        - $ref: "#/components/parameters/NewDateParam"
+        - $ref: "#/components/parameters/SaleDateParam"
+        - $ref: "#/components/parameters/SizeParam"
+        - $ref: "#/components/parameters/KeywordParam"
+        - $ref: "#/components/parameters/OffrateParam"
+        - $ref: "#/components/parameters/ColorParam"
+        - $ref: "#/components/parameters/PriceParam"
+        - $ref: "#/components/parameters/ArrivalParam"
+        - $ref: "#/components/parameters/SaleParam"
+        - $ref: "#/components/parameters/GiftParam"
+        - $ref: "#/components/parameters/LimitedSaleParam"
+        - $ref: "#/components/parameters/SalesPromotionParam"
+        - $ref: "#/components/parameters/ShipFreeParam"
+        - $ref: "#/components/parameters/PreOrderParam"
+        - $ref: "#/components/parameters/UsedParam"
+        - $ref: "#/components/parameters/CouponParam"
+        - $ref: "#/components/parameters/SizeDetailParam"
+        - $ref: "#/components/parameters/FullColorParam"
+        - $ref: "#/components/parameters/SecretSaleParam"
+      responses:
+        200:
+          description: メニューレスポンス情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeoResponse"
+        400:
+          description: BadRequestエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: NotFoundエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        405:
+          description: MethodNotAllowedエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: InternalServerエラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    ### searchAPI
+    SearchResponse:
+      type: object
+      properties:
+        redirectURL:
+          type: string
+          description: リダイレクト先URL
+          example: https://search-voi.0101.co.jp/brand/10030/
+        searchContent:
+          $ref: "#/components/schemas/SearchContent"
+    SearchContent:
+      type: object
+      required:
+        - naviTreeTitle
+        - naviTreeUrl
+        - products
+        - nowPage
+        - per
+        - sortMenu
+        - total
+        - colorDisplay
+        - showPrice
+      properties:
+        naviTreeTitle:
+          type: string
+          description: トップのタイトル.「○I○I　web channel TOP」が固定値で設定
+          example: ○I○I　web channel TOP
+        naviTreeUrl:
+          type: string
+          description: トップのURL。固定値
+          example: http://voi.0101.co.jp/voi/
+        products:
+          type: array
+          description: 商品情報一覧。検索にマッチする商品が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/SearchProduct"
+        nowPage:
+          type: integer
+          description: 何ページ目か（最低ページは1)
+          example: 1
+        per:
+          type: integer
+          description: 1ページあたりの商品件数
+          example: 100
+        sortMenu:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchResponseSort"
+        total:
+          type: integer
+          description: 総商品件数
+          example: 100
+        colorDisplay:
+          type: array
+          description: 「全色表示/代表色」選択UIのための情報
+          items:
+            $ref: "#/components/schemas/ColorDisplay"
+        captionText:
+          type: string
+          description: |
+            ブランド、ショップ等が持つ説明文 \
+            factor=shop,brand,webshopの場合のみに設定、他はnull
+          example: example caption
+        isBannerVisible:
+          type: boolean
+          description: バナー情報を表示するかどうかの判定結果; trueなら表示
+          example: true
+        showPrice:
+          type: boolean
+          description: 価格を表示するかの判定; trueなら表示
+          example: true
+        logoImageAltText:
+          type: string
+          description: ショップのロゴ画像ALT
+          example: example text
+        logoImageURI:
+          type: string
+          description: ショップのロゴ画像パス
+          example: adidas.gif
+        store:
+          type: string
+          description: storeIDに対応するテキスト 複数指定された場合はカンマ区切りでテキストを繋げる (ex. ファッション、スポーツ)
+          example: ファッション
+
+    SearchProduct:
+      type: object
+      description: searchAPI用の商品情報。
+      required:
+        - productId
+        - flags
+      properties:
+        productId:
+          type: string
+          description: 商品ID
+          example: WW7786010101
+        detailUrl:
+          type: string
+          description: 商品詳細ページURL。パッケージが持つ絶対パスをそのまま渡す
+          example: //voi.0101.co.jp/voi/webcatalog/showGoodsDetails.do?wrt=5&mcd=WW769&cpg=601&pno=11&ino=01
+        taxInclusivePrice:
+          type: integer
+          description: 税込価格
+          example: 2796
+        oldPrice:
+          type: integer
+          description: 二重価格表示用
+          example: 0
+        discountRate:
+          type: integer
+          description: 割引率(%)
+          example: 0
+        brandTextJP:
+          type: string
+          description: ブランド名称(日本語)
+          example: ヴェリココ/ラクチンきれいシューズ
+        brandTextEN:
+          type: string
+          description: ブランド名称(英語)
+          example: velikoko
+        flags:
+          $ref: "#/components/schemas/Flags"
+        productName1:
+          type: string
+          description: 商品の名前
+          example: 【19.5～27.0cm】2Wayファーパンプス（1.5cmヒール）
+        productName2:
+          type: string
+          description: 商品の属するブランドの日本語名+英語名(現状)
+          example: パープル＆イエロー（レディース）（Purple & Yellow）
+        imageURL:
+          type: string
+          description: メイン画像へのURL。パッケージが持つ絶対パスをそのまま渡す
+          example: https://voi.0101.co.jp/voi/webcatalog/img/ww777/601/ww777-60110-54a.jpg
+        commentCount:
+          type: integer
+          description: ユーザーコメント数、nullあり
+          example: 0
+        evaluationAverage:
+          type: number
+          format: float
+          description: ユーザー平均評価、0.0~5.0
+          example: 0.0
+        favoriteCount:
+          type: integer
+          description: お気に入り登録数、nullあり
+        scdName:
+          type: string
+          description: アイテムカテゴリ名称 (t_item_code_text を返却)
+          example: "パンプス"
+        couponThumbnail:
+          type: string
+          description: クーポンのサムネイル
+          example: 1000円クーポン対象商品
+        bulkDiscountMessage:
+          type: string
+          description: |
+            '''
+            まとめ割のメッセージ
+            下記いずれか該当する場合は null で返却
+            アイコンフラグ-まとめ割が1でない商品, まとめ割オフ率が0より大きい数でない商品, まとめ割引適用下限商品点数が1より大きい数でない商品
+            その他 "[適用下限商品点数]点以上で[オフ率]%OFF" の規則で生成し返却
+            '''
+          example: 2点以上で10%OFF
+        colorProducts:
+          type: array
+          description: |
+            '''
+            色玉表示用 MARUI-63 https://zero-start.backlog.jp/view/MARUI-63
+            代表色表示の時は value を返却する
+            全色表示の時は null を返却する
+            メイン画像と一致する画像を持つ (product.s_thumb_img = color_product.s_thumb_img となる) color_product が存在しない場合のみ、 array の末尾にダミー色玉として代表色 product マスタの情報を追加
+            '''
+          items:
+            $ref: "#/components/schemas/colorProduct"
+
+    ColorDisplay:
+      type: object
+      description: |
+        基本的に下の形です。リクエストのfullパラメータによってselectedフィールドの値が切り替わります。\
+        ```
+        [{name: 全色表示, selected: true},
+        {name: 代表色, selected: false}]
+        ```
+      required:
+        - name
+        - selected
+      properties:
+        name:
+          type: string
+          description: 全色表示 or 代表色
+        selected:
+          type: boolean
+          description: trueだったら選択中；falseだったら選択されてない
+
+    Flags:
+      type: object
+      description: |
+        アイコンフラグ一覧の連想配列、無い時は空配列
+        keyがアイコンの名前、valueがboolean型である連想配列。trueなら商品にそのアイコンが存在
+      required:
+        - pricereduced
+        - pricerereduced
+        - sale
+        - giftwrap
+        - rearrival
+        - newarrival
+        - limitedsale
+        - salespromotion
+        - deliveryfeeoff
+        - secretsale
+        - reservation
+        - used
+        - coupon
+        - bulkdiscount
+      properties:
+        pricereduced:
+          type: boolean
+          description: 値下げフラグ判定
+          example: false
+        pricerereduced:
+          type: boolean
+          description: 再値下げフラグ判定(パッケージの"pricereduced=2"に相当)
+          example: false
+        sale:
+          type: boolean
+          description: セールフラグ判定
+          example: false
+        giftwrap:
+          type: boolean
+          description: ギフトラッピングフラグ判定
+          example: false
+        rearrival:
+          type: boolean
+          description: 再入荷商品フラグ判定
+          example: false
+        newarrival:
+          type: boolean
+          description: 新着商品フラグ判定
+          example: false
+        limitedsale:
+          type: boolean
+          description: 期間限定セールフラグ判定
+          example: false
+        salespromotion:
+          type: boolean
+          description: 販促キャンペーンフラグ判定
+          example: false
+        deliveryfeeoff:
+          type: boolean
+          description: 配送料無料フラグ判定
+          example: false
+        secretsale:
+          type: boolean
+          description: シークレット販売フラグ判定
+          example: false
+        reservation:
+          type: boolean
+          description: 先行予約商品フラグ判定
+          example: false
+        used:
+          type: boolean
+          description: 中古商品フラグ判定
+          example: false
+        coupon:
+          type: boolean
+          description: クーポンフラグ判定
+          example: false
+        bulkdiscount:
+          type: boolean
+          description: まとめ割判定
+          example: false
+
+    ColorProductFlags:
+      type: object
+      description: |
+        アイコンフラグ一覧の連想配列、無い時は空配列
+        keyがアイコンの名前、valueがboolean型である連想配列。trueなら商品にそのアイコンが存在
+      required:
+        - rearrival
+        - newarrival
+        - reservation
+      properties:
+        rearrival:
+          type: boolean
+          description: 再入荷商品フラグ判定
+          example: false
+        newarrival:
+          type: boolean
+          description: 新着商品フラグ判定
+          example: false
+        reservation:
+          type: boolean
+          description: 先行予約商品フラグ判定
+          example: false
+
+    SearchResponseSort:
+      type: object
+      required:
+        - id
+        - name
+        - isSelected
+        - order
+      properties:
+        id:
+          type: string
+          example: 0
+        name:
+          type: string
+          example: 新着順
+        isSelected:
+          type: boolean
+          example: false
+        order:
+          type: integer
+          example: 1
+
+    Breadcrumb:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          example: ファッション通販マルイウェブチャネル
+        url:
+          type: string
+          example: https://voi.0101.co.jp/voi/index.jsp
+
+    popularKeyword:
+      type: object
+      description: 人気検索条件の要素
+      required:
+        - param
+        - value
+        - label
+      properties:
+        param:
+          type: string
+          description: 絞り込みパラメータ名
+          example: bcd
+        value:
+          type: object
+          required:
+            - id
+            - name
+          properties:
+            id:
+              type: string
+              description: childIdがnullのとき、絞り込みに設定する属性のid値 childIdがnullでないとき、親のid値 param=brand の場合、firstLetter
+              example: "ア"
+            childId:
+              type: string
+              description: param=item,brand,keyword のとき、絞り込みに設定する属性のid値
+              example: "30143"
+            name:
+              type: string
+              description: 絞り込みに設定する属性の名前
+              example: "アディダス"
+        label:
+          type: string
+          description: 絞り込み項目表示名
+          example: "ブランド"
+
+    colorProduct:
+      type: object
+      description: 色玉の要素, またはダミー色玉
+      required:
+        - productId
+        - colorId
+        - colorName
+        - imageURL
+        - detailUrl
+        - taxInclusivePrice
+        - oldPrice
+        - discountRate
+        - flags
+      properties:
+        productId:
+          type: string
+          description: color_product.item_id カラー商品単位の商品ID ダミー色玉の場合 product.item_id
+          example: WW5553671301_04
+        colorId:
+          type: string
+          description: color_product.sm_color_id, color id ダミー色玉の場合、固定値「dummy」
+          example: black
+        colorName:
+          type: string
+          description: color_product.sm_color_search, 表示名 ダミー色玉の場合、固定値「ダミー」
+          example: ブラック
+        imageURL:
+          type: string
+          description: color_product.s_thumb_img イメージ画像 ダミー色玉の場合 product.s_thumb_img
+          example: https://~~~
+        detailUrl:
+          type: string
+          description: 該当商品のリンク
+          example: https://searchvoi~~
+        taxInclusivePrice:
+          type: integer
+          description: 税込価格
+          example: 2796
+        oldPrice:
+          type: integer
+          description: 二重価格表示用
+          example: 0
+        discountRate:
+          type: integer
+          description: 割引率(%)
+          example: 0
+        flags:
+          $ref: "#/components/schemas/ColorProductFlags"
+
+    ### MenuAPI
+    MenuResponse:
+      type: object
+      required:
+        - figure
+        - size
+        - sizeDetail
+        - price
+        - color
+        - item
+        - keyword
+        - favoriteShop
+        - brand
+        - freeword
+        - exword
+        - coupon
+        - saleOption
+        - offrate
+        - arrivalDate
+        - gift
+        - used
+        - title
+        - fcdScdMap
+        - scdRecommendations
+        - popularKeywords
+      properties:
+        figure:
+          type: array
+          description: 性別情報一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        size:
+          type: array
+          description: サイズ情報一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        sizeDetail:
+          type: array
+          description: こだわりサイズ一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuSizeDetailProperty"
+        price:
+          $ref: "#/components/schemas/MenuPriceProperty"
+        color:
+          type: array
+          description: カラー情報一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        item:
+          type: array
+          description: アイテム情報一覧。factor=itemかつscdがある、及び情報がない場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuFcdProperty"
+        keyword:
+          type: array
+          description: 特徴情報一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuKeywordGroupProperty"
+        favoriteShop:
+          type: array
+          description: お気に入りショップ情報一覧。お気に入り登録、及び情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        brand:
+          type: array
+          description: |
+            ブランド情報一覧。factor=brand、及び情報が無い場合は空配列。\
+            ショップブランドAPIと異なり、ブランド情報のみを返す \
+            アプリの絞り込みUIにおける「ショップ」はこのフィールドの情報を使う
+          items:
+            $ref: "#/components/schemas/MenuBrandWithInitialProperty"
+        freeword:
+          type: string
+          description: フリーワード検索内容(リクエストのqパラメータの中身をそのまま返す)
+          example: "ナイキ　メンズ"
+        exword:
+          type: string
+          description: 除外キーワード検索内容(リクエストのexqパラメータの中身をそのまま返す)
+          example: "トート"
+        coupon:
+          $ref: "#/components/schemas/MenuCheckProperty"
+        saleOption:
+          type: array
+          description: セール・通常価格情報一覧。factor=sale、及び情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        offrate:
+          type: array
+          description: オフ率情報一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        arrivalOption:
+          type: array
+          description: 新着・再入荷情報一覧。factor=new、及び情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        gift:
+          $ref: "#/components/schemas/MenuCheckProperty"
+        used:
+          type: array
+          description: 新品・中古情報一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+        title:
+          type: string
+          description: |
+            絞り込みUIの上に表示される、検索結果のタイトル。factorごとのルールは以下
+            * new -> "最新入荷・再入荷商品"
+            * sale -> "セール商品"
+            * q -> フリーワード検索文字列
+            * その他 -> 必須パラメータの内容
+          example: "アウター・ジャケット"
+        fcdScdMap:
+          type: array
+          description: fcdとscdの紐付き。scdパラメータが指定されていなかったら空配列になる。
+          items:
+            type: object
+            description: fcdとscdの紐付き
+            required:
+              - scdId
+            properties:
+              fcdId:
+                type: string
+                description: scdに紐づいてるfcdId。データがない場合nullになります。
+                example: "0001"
+              scdId:
+                type: string
+                description: scdのId
+                example: "30001"
+        popularKeywords:
+          type: array
+          description: タッチサジェスト MARUI-61 https://zero-start.backlog.jp/view/MARUI-61
+          items:
+            $ref: "#/components/schemas/popularKeyword"
+
+    ### ScdRecommendationApi
+    ScdRecommendationResponse:
+      type: object
+      required:
+        - scdRecommendations
+      properties:
+        scdRecommendations:
+          type: array
+          description: マッピング表をベースにしておすすめのscdリスト
+          items:
+            $ref: "#/components/schemas/ScdRecommendation"
+
+    ScdRecommendation:
+      type: object
+      required:
+        - name
+        - url
+      properties:
+        name:
+          type: string
+          example: その他アウター・ジャケット
+        url:
+          type: string
+          example: "https://search-voi.0101.co.jp/item/?scd=30161"
+
+    ### MySizeAPI
+    MySizeResponse:
+      type: object
+      required:
+        - mySize
+      properties:
+        mySize:
+          type: array
+          description: マイサイズ一覧。情報が無い場合は空配列
+          items:
+            $ref: "#/components/schemas/MenuMySizeProperty"
+
+    ### SeoAPI
+    SeoResponse:
+      type: object
+      required:
+        - seo
+        - breadcrumbs
+      properties:
+        seo:
+          $ref: "#/components/schemas/MenuSeoProperty"
+        breadcrumbs:
+          type: array
+          description: パンくずリスト
+          items:
+            $ref: "#/components/schemas/Breadcrumb"
+
+    MenuCommonProperty:
+      type: object
+      required:
+        - id
+        - count
+        - isSelected
+      description: 「性別」「サイズ」「カラー」「セール・通常価格」「セール開始日」「オフ率」「新着・再入荷」「再入荷日」「新着・中古」のレスポンスの型
+      properties:
+        id:
+          type: string
+          description: 属性のid
+          example: "001"
+        name:
+          type: string
+          description: 属性の名前、パッケージから情報を取得できなければnull
+          example: Mock name
+        count:
+          type: integer
+          description: 対応する商品の件数
+          example: 0
+        isSelected:
+          type: boolean
+          description: 選択中か否か; trueなら選択中
+          example: true
+        order:
+          type: integer
+          description: 表示順、パッケージから情報を取得できなければnull
+          example: 0
+
+    MenuCheckProperty:
+      type: object
+      required:
+        - count
+        - isSelected
+      description: |
+        「クーポン」「無料ギフト対象」のレスポンスの型 \
+        チェック項目なので、商品件数及びチェック判定のみを返す。
+      properties:
+        count:
+          type: integer
+          description: 対応する商品の件数
+          example: 0
+        isSelected:
+          type: boolean
+          description: 選択中か否か; trueなら選択中
+          example: true
+
+    MenuBrandWithInitialProperty:
+      type: object
+      required:
+        - firstLetter
+        - brandList
+      description: |
+        頭文字(ex. "ナ")と、対応するブランド(ex. "nike")をまとめたリスト \
+        頭文字は「ア, カ, サ, タ, ナ, ハ, マ, ヤ, ラ, ワ」のいずれか(アルファベットは無し)。\
+        もしブランドが複数の頭文字を持っていた場合、最初にヒットした頭文字を選ぶ
+      properties:
+        firstLetter:
+          type: string
+          description: (ある)ブランドの頭文字
+          example: "ア"
+        brandList:
+          type: array
+          description: firstletterから始まるブランドの一覧
+          items:
+            $ref: "#/components/schemas/MenuBrandProperty"
+
+    MenuBrandProperty:
+      type: object
+      required:
+        - id
+        - count
+        - isSelected
+      description: 「ブランド」のレスポンスの型
+      properties:
+        id:
+          type: string
+          description: ブランドのid
+          example: nike
+        nameJp:
+          type: string
+          description: ブランドの名前(日本語)、パッケージから情報を取得できなければnull
+          example: ナイキ
+        nameEn:
+          type: string
+          description: ブランドの名前(英語)、パッケージから情報を取得できなければnull
+          example: Nike
+        count:
+          type: integer
+          description: 対応する商品の件数
+          example: 200
+        isSelected:
+          type: boolean
+          description: 選択中か否か
+          example: true
+
+    MenuFcdProperty:
+      type: object
+      required:
+        - id
+        - isSelected
+        - scdList
+      description: アイテム > サブカテゴリ(fcd)のレスポンスの型
+      properties:
+        id:
+          type: string
+          description: fcdのID
+          example: 10015
+        name:
+          type: string
+          description: fcdの名前、パッケージから情報を取得できなければnull
+          example: アウター・ジャケット
+        order:
+          type: integer
+          description: 表示順、パッケージから情報を取得できなければnull
+          example: 0
+        isSelected:
+          type: boolean
+          description: 選択中か否か
+          example: true
+        scdList:
+          type: array
+          description: 対応するscd一覧
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+
+    MenuKeywordGroupProperty:
+      type: object
+      required:
+        - id
+        - keywordList
+      description: 特徴 > 特徴グループ(keywordGroup)のレスポンスの型
+      properties:
+        id:
+          type: string
+          description: keywordGroupのID、パッケージから情報を取得できなければnull
+          example: G0007
+        name:
+          type: string
+          description: keywordGroupの名前、パッケージから情報を取得できなければnull
+          example: 機能・特徴
+        order:
+          type: integer
+          description: 表示順、パッケージから情報を取得できなければnull
+          example: 0
+        keywordList:
+          type: array
+          description: 対応するkeyword一覧
+          items:
+            $ref: "#/components/schemas/MenuCommonProperty"
+
+    MenuSizeDetailProperty:
+      type: object
+      required:
+        - id
+        - bottom
+        - top
+      description: 「こだわりサイズ」のレスポンスの型
+      properties:
+        id:
+          type: string
+          description: こだわりサイズのid
+          example: 008
+        name:
+          type: string
+          description: こだわりの名前、パッケージから情報を取得できなければnull
+          example: ゆき丈
+        bottom:
+          type: number
+          format: float
+          description: こだわりサイズの下限、パッケージから情報を取得できなければ"0.0"
+          example: 0.0
+        top:
+          type: number
+          format: float
+          description: こだわりサイズの上限、パッケージから情報を取得できなければ"0.0"
+          example: 100.0
+        order:
+          type: integer
+          description: 表示順、パッケージから情報を取得できなければnull
+          example: 0
+
+    MenuMySizeProperty:
+      type: object
+      description: 「マイサイズ」レスポンスの型。
+      properties:
+        key:
+          type: string
+          description: レコメンドサーバから取得するマイサイズ(*_*)の前半
+          example: apparel
+        item:
+          type: array
+          items:
+            type: object
+            description: サイズの情報
+            properties:
+              id:
+                description: サイズのID
+                type: string
+                example: "100001"
+              value:
+                description: |
+                  レコメンドサーバから取得するマイサイズ(*_*)の後半 \
+                  keyが同じものをまとめて配列で返す
+                type: string
+                example: S
+
+    MenuPriceProperty:
+      type: object
+      description: 「価格」のレスポンスの型。 商品全体の価格範囲を返す。
+      required:
+        - priceBottom
+        - priceTop
+      properties:
+        priceBottom:
+          type: integer
+          description: 最低価格、パッケージから情報を取得できなければ"0"
+          example: 0
+        priceTop:
+          type: integer
+          description: 最高価格、パッケージから情報を取得できなければ"0"
+          example: 50000
+
+    MenuSeoProperty:
+      type: object
+      description: |
+        SEO情報 \
+        title: 【factorの内容】、【パラメータの内容】【定型内容】\
+        keyword: 【factorの内容】,【パラメータの内容】【定型内容】 \
+        description: 【factorの内容】、【パラメータの内容】の商品一覧ページです。【factorの内容】,【パラメータの内容】を買うならマルイの通販サイト「マルイウェブチャネル」で！
+      required:
+        - title
+        - keyword
+        - description
+      properties:
+        title:
+          type: string
+          description: SEOのtitleタグ情報
+          example: ブランド、ナイキ(NIKE)の通販|マルイ
+        keyword:
+          type: string
+          description: SEOのkeywordタグ情報。各要素をカンマで繋ぐ
+          example: ブランド,ナイキ(NIKE),マルイ,通販,ファッション,商品一覧
+        description:
+          type: string
+          description: SEOのdescriptionタグ情報
+          example: ブランド、ナイキ(NIKE)の商品一覧ページです。ブランド, ナイキ(NIKE)を買うならマルイの通販サイト「マルイウェブチャネル」で！
+
+    ### Suggest API
+    SuggestResponse:
+      type: object
+      required:
+        - sequenceNumber
+        - q
+        - size
+        - suggest
+      properties:
+        q:
+          type: string
+          description: リクエスト元ワード
+          example: "ナイキ"
+        size:
+          type: integer
+          description: サジェストワード返却件数（０−１０件）
+          example: 10
+        sequenceNumber:
+          type: string
+          description: 連携用シーケンス番号
+          example: "49604796081391776529549969075659817104104667995845951490"
+        suggest:
+          type: array
+          description: サジェストワード情報
+          items:
+            $ref: "#/components/schemas/SuggestWords"
+
+    SuggestWords:
+      type: object
+      required:
+        - type
+        - keyword
+      properties:
+        type:
+          type: string
+          description: サジェストワードカテゴリ; ブランド, カテゴリ, 人気ワードのいずれか
+          example: "ブランド"
+        id:
+          type: string
+          description: サジェストワードid
+          example: "85"
+        keyword:
+          type: string
+          description: サジェストワード
+          example: "ナイキ"
+
+    ### TrendwordAPI
+    TrendwordResponse:
+      type: object
+      required:
+        - trendwords
+      properties:
+        trendwords:
+          type: array
+          description: トレンドワード結果配列
+          items:
+            $ref: "#/components/schemas/Trendword"
+
+    Trendword:
+      type: object
+      required:
+        - trendword
+        - url
+        - order
+        - rank
+      properties:
+        trendword:
+          type: string
+          description: トレンドワード
+          example: アディダス
+        url:
+          type: string
+          description: 検索結果URL
+          example: https://search-voi.0101.co.jp/freeword/?store=&q=%83A%83f%83B%83_%83X
+        order:
+          type: integer
+          description: 返す件の中の順番(０から)
+          example: 0
+        access:
+          type: integer
+          description: アクセス数
+          example: 328
+
+    ### ItemCategoryAPI
+    ItemCategoryResponse:
+      type: object
+      required:
+        - itemList
+      properties:
+        itemList:
+          type: array
+          description: アイテムカテゴリ情報をarrayで保持
+          items:
+            $ref: "#/components/schemas/ItemCategory"
+
+    ItemCategory:
+      type: object
+      required:
+        - count
+        - itemId
+        - parameterType
+        - url
+      properties:
+        count:
+          type: integer
+          description: カテゴリごとの取得総数
+          example: 30
+        itemId:
+          type: string
+          description: アイテムカテゴリId (fcdが指定されていなければfcd, 指定されていればscdのId)
+          example: "10000"
+        itemName:
+          type: string
+          description: アイテムカテゴリ名
+          example: "レディースアウター・ジャケット"
+        parameterType:
+          type: string
+          description: パラメータタイプ (fcdが指定されていなければfcd, 指定されていればscd)
+          example: "fcd"
+        url:
+          type: string
+          description: 対応する検索の絶対パス, リクエストパラメータ＋fcdまたはscd(fcdが指定されていなければfcdのみ, 指定されていればfcdとscd)
+          example: "https://search-voi.0101.co.jp/search?factor=item&floor=ladies&fcd=10000&scd=10001"
+
+    ### Ranking API
+    RankingResponse:
+      type: object
+      required:
+        - grouping
+        - items
+        - groups
+        - showPrice
+      properties:
+        grouping:
+          type: boolean
+          description: |
+            グループ機能　
+            * `true`: グルーピング機能 オン（`items`はnull）
+            * `false`: グルーピング機能　オフ（`groups`はnull）
+          example: false
+        items:
+          type: object
+          description: グルーピングがoffの場合ランキング情報を保持
+          required:
+            - shopBrandResult
+            - itemResult
+            - productResult
+          properties:
+            productResult:
+              type: array
+              description: |
+                ランキング情報
+                `type` パラメータが`product`, `color` 以外の場合空配列を返す
+              items:
+                $ref: "#/components/schemas/RankingProduct"
+            shopBrandResult:
+              type: array
+              description: |
+                ランキング情報
+                `type` パラメータが`shop`, `brand` 以外の場合空配列を返す
+              items:
+                $ref: "#/components/schemas/RankingShopBrand"
+            itemResult:
+              type: array
+              description: |
+                ランキング情報
+                `type` パラメータが`item` 以外の場合空配列を返す
+              items:
+                $ref: "#/components/schemas/RankingItemCategory"
+
+        groups:
+          type: array
+          description: groupingがonの場合ランキング用プロダクト情報をarrayで保持
+          items:
+            $ref: "#/components/schemas/RankingGroups"
+        showPrice:
+          type: boolean
+          description: 価格を表示するかの判定; trueなら表示
+          example: true
+
+    RankingType:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: |
+            返却粒度
+            * `item`: カテゴリ
+            * `brand`: ブランド
+            * `shop`: ショップ
+            * `product`: 型番
+            * `color`: 型番+カラー
+          example: "item"
+
+    RankingShopBrand:
+      type: object
+      required:
+        - type
+        - capitalLetters
+        - count
+        - isShopFlag
+        - linkUrl
+        - shopBrandId
+      properties:
+        type:
+          type: string
+          description: |
+            返却粒度
+            * `brand`: ブランド
+            * `shop`: ショップ
+          example: "item"
+        capitalLetters:
+          type: array
+          items:
+            type: string
+          example:
+            - A
+            - ア
+          description: ショップかブランドの頭文字
+        count:
+          type: integer
+          description: ショップかブランドの商品総数
+          example: 261
+        isShopFlag:
+          type: boolean
+          description: shopかbrandかどっちかを判定; trueならショップ; falseならブランド
+          example: true
+        linkUrl:
+          type: string
+          description: ショップかブランドページへのurl
+          example: https://search-voi.0101.co.jp/shop/adidas/?floor=sb_l_all
+        nameJp:
+          type: string
+          description: ショップかブランドの日本語名
+          example: アディダス
+        nameEn:
+          type: string
+          description: ショップかブランドの英語名
+          example: Adidas
+        shopBrandId:
+          type: string
+          description: ショップかブランドのID
+          example: adidas
+        rank:
+          type: integer
+          description: 人気順（１からの昇順）
+          example: 1
+
+    RankingItemCategory:
+      type: object
+      required:
+        - type
+        - rank
+        - count
+        - itemId
+        - parameterType
+        - url
+      properties:
+        type:
+          type: string
+          description: |
+            返却粒度
+            * `item`: カテゴリ
+          example: "item"
+        rank:
+          type: integer
+          description: 順位（1から）
+          example: "1"
+        count:
+          type: integer
+          description: カテゴリごとの取得総数
+          example: 30
+        itemId:
+          type: string
+          description: アイテムカテゴリId (fcdが指定されていなければfcd, 指定されていればscdのId)
+          example: "10000"
+        itemName:
+          type: string
+          description: アイテムカテゴリ名
+          example: "レディースアウター・ジャケット"
+        parameterType:
+          type: string
+          description: パラメータタイプ (fcdが指定されていなければfcd, 指定されていればscd)
+          example: "fcd"
+        url:
+          type: string
+          description: 対応する検索の絶対パス, リクエストパラメータ＋fcdまたはscd(fcdが指定されていなければfcdのみ, 指定されていればfcdとscd)
+          example: "https://search-voi.0101.co.jp/search?factor=item&floor=ladies&fcd=10000&scd=10001"
+
+    RankingGroups:
+      type: object
+      required:
+        - groupType
+        - groupName
+        - productResult
+      properties:
+        groupType:
+          type: string
+          description: |
+            グループの返却粒度
+            * `item`: カテゴリ
+            * `brand`: ブランド
+            * `shop`: ショップ
+          example: brand
+        groupTitle:
+          type: string
+          description: タイトル; brandなら、ナイキ、アディダスなど keywordなら花柄などの項目名
+          example: ナイキ
+        groupId:
+          type: string
+          description: ID
+          example: 10000
+        productResult:
+          type: array
+          description: groupingがonの場合ランキング用プロダクト情報をarrayで保持
+          items:
+            $ref: "#/components/schemas/RankingProduct"
+
+    RankingProduct:
+      type: object
+      #削った項目
+      # "M_caption", "M_composition", "M_country", "M_img_color", "M_img_main",
+      # "M_img_main_new", "M_keywords", "M_price_class", "M_product_name_1", "M_product_name_2",
+      # "M_thumb_cc", "M_thumb_color", "M_url", "PCDetailShowSpecialText", "PCDetailShowSpecialTextNoHTML",
+      # "P_caption", "P_composition", "P_country", "P_img_thumb","P_img_thumb_s",
+      # "P_product_brand_name", "P_product_name_1", "P_product_name_2","P_thumb_cc",
+      # "P_thumb_color", "P_thumb_size", "SPDetailShowSpecialText", "SPDetailShowSpecialTextNoHTML",
+      # "colorVar", "colorVarAPI", "colorVarSP","color_order_no",
+      # "icon_catalog", "icon_deliveryfeeoff", "icon_fewinsale", "icon_flag", "icon_flag_match",
+      # "icon_flag_search", "icon_giftwrap", "icon_limitedsale", "icon_newarrival", "icon_pricereduced",
+      # "icon_pricerereduced", "icon_rearrival", "icon_reservation", "icon_sale", "icon_used": null,
+      # "m_caption", "m_composition", "m_country", "m_img_color", "m_img_main", "m_img_main_new", "m_keywords",
+      # "m_price_class", "m_product_name_1", "m_product_name_2", "m_thumb_cc", "m_thumb_color",
+      # "m_thumb_size", "m_url", "p_product_brand_name","p_caption", "qr_code_url", "shop",
+      # "showPCDetailSpecialText", "showPCDetailSpecialTextNoHTML", "showPCSpecialText", "showPCSpecialTextNoHTML",
+      # "showSPDetailSpecialText", "showSPDetailSpecialTextNoHTML", "showSPSpecialText", "showSPSpecialTextNoHTML",
+      # "showSizeText", "size", "sizeArray", "sizeOrderNoArray", "sizeurl", "tcd", "voiM_url"
+      required:
+        - type
+        - api_price_type
+        - code
+        - fcd
+        - order_no
+        - price
+        - product_id
+        - rank
+        - scd
+        - allBrands
+      properties:
+        type:
+          type: string
+          description: |
+            返却粒度
+            * `product`: 型番
+            * `color`: 型番+カラー
+          example: "item"
+        api_price_type:
+          type: boolean
+          description: 価格タイプ;　セール、値下げ、再値下げのいずれか(true) / その他(false)
+          example: true
+        bcd:
+          type: string
+          description: ブランドコード
+          example: "10799"
+        brand:
+          type: string
+          description: ブランド名（日本語）
+          example: "ナイキ"
+        code:
+          type: string
+          description: product idと同じ
+          example: "TO6022040801"
+        color:
+          type: string
+          description: 色
+          example: "ホワイト、ブラック、ピンク"
+        commentCount:
+          type: integer
+          description: コメント数
+          example: 5
+        detailurl:
+          type: string
+          description: 商品詳細url（絶対パス）
+          example: "https://voi.0101.co.jp/voi/webcatalog/showGoodsDetails.do?wrt=5&mcd=TO602&cpg=204&pno=08&ino=01"
+        discount_rate:
+          type: string
+          description: 割引率（%）
+          example: "0"
+        evaluationAverage:
+          type: number
+          format: float
+          description: 商品の平均評価値（0.0 ~ 5.0）
+          example: 3.5
+        favoriteCount:
+          type: integer
+          description: お気に入り登録数
+          example: 5
+        fcd:
+          type: array
+          description: 商品に紐付くfcdリスト（ない場合は空配列）
+          items:
+            type: string
+          example:
+            - 10000
+            - 10001
+            - 10002
+            - 10003
+        imgurl:
+          type: string
+          description: 商品画像url（絶対パス）
+          example: "https://voi.0101.co.jp/voi/webcatalog/img/to602/204/to602-20408-02s.jpg"
+        keyword:
+          type: string
+          description: 特徴情報
+          example: "G0001_A1204"
+        #example product参照
+        name1:
+          type: string
+          description: 商品タイトル1 (商品を見るボタンの下に表示される文字列)
+          example: 【19.5～27.0cm】2Wayファーパンプス（1.5cmヒール）
+        #example product参照
+        name2:
+          type: string
+          description: 商品名2
+          example: パープル＆イエロー（レディース）（Purple & Yellow）
+        old_price:
+          type: string
+          description: 旧価格
+          example: "0"
+        order_no:
+          type: string
+          description: 注文id; product_idの10文字目まで？; ５文字目後に-
+          example: "TO602-20408"
+        p_composition:
+          type: string
+          description: 商品の素材
+          example: "コットン100%"
+        p_country:
+          type: string
+          description: 製造国
+          example: "日本製"
+        p_img_thumb:
+          type: string
+          description: サムネイル画像url(//voi.0101.co.jp〜)
+          example: "//voi.0101.co.jp/voi/webcatalog/img/to602/204/to602-20408-02a.jpg"
+        p_img_thumb_s:
+          type: string
+          description: サムネイル画像url(小)(//voi.0101.co.jp〜)
+          example: "//voi.0101.co.jp/voi/webcatalog/img/to602/204/to602-20408-02s.jpg"
+        p_product_name_1:
+          type: string
+          description: 商品タイトル1 (商品を見るボタンの下に表示される文字列)
+          example: "【19.5～27.0cm】2Wayファーパンプス（1.5cmヒール）"
+        p_product_name_2:
+          type: string
+          description: 商品名2
+          example: "パープル＆イエロー（レディース）（Purple & Yellow）"
+        p_thumb_cc:
+          type: string
+          description: サムネイル用キャッチコピー
+          example: "キャッチコピー"
+        p_thumb_color:
+          type: string
+          description: サムネイル用カラー
+          example: "ホワイト、ブラック、ピンク"
+        p_thumb_size:
+          type: string
+          description: サムネイル用サイズ; "FREE","M"など
+          example: "22.5～28.0cm"
+        price:
+          type: string
+          description: 価格
+          example: "1000"
+        product_id:
+          type: string
+          description: 商品id
+          example: "TO6022040801"
+        rank:
+          type: integer
+          description: 順位（1から）
+          example: "1"
+        rearrival_date:
+          type: string
+          description: 入荷日（yyyy-mm-dd)
+          example: "2020-04-17"
+        sale:
+          type: string
+          description: |
+            セールフラグ。`０` だったらセールじゃない。`1` だったらセール。
+          example: "0"
+        sale_start_date:
+          type: string
+          description: セール開始日（yyyy-mm-dd)
+          example: "2020-04-17"
+        scd:
+          type: array
+          description: 商品に紐付くscd一覧（ない場合は空配列）
+          items:
+            type: string
+          example:
+            - 10004
+            - 10005
+            - 10006
+            - 10007
+        specialprice:
+          type: string
+          description: 特別価格フラグ。`0` だったら特別価格ではない。`1`だったら特別価格。
+          example: "0"
+        tax_inclusive_price:
+          type: string
+          description: 税込み価格
+          example: "1000"
+        thumb:
+          type: string
+          description: サムネイル画像ファイル名
+          example: "mockFileName.jpg"
+        voiUrl:
+          type: string
+          description: 商品詳細ページurl(絶対パス)
+          example: "https://voi.0101.co.jp/voi/webcatalog/showGoodsDetails.do?wrt=5&mcd=TO602&cpg=204&pno=08&ino=01"
+        web_brand_code:
+          type: string
+          description: ブランドコード
+          example: "10799"
+        web_brand_code_text_en:
+          type: string
+          description: ブランド名（英語）
+          example: "Nike"
+        web_brand_code_text_jp:
+          type: string
+          description: ブランド名（日本語）
+          example: "ナイキ"
+        allBrands:
+          type: array
+          description: サブブランドを含めて全ブランドのコード
+          items:
+            type: string
+          example:
+            - 30000
+            - 30030
+            - 30033
+
+    ### ShopBrandAPI
+    ShopBrandResponse:
+      type: object
+      required:
+        - shopBrands
+      properties:
+        shopBrands:
+          type: array
+          description: ショップブランド一覧
+          items:
+            $ref: "#/components/schemas/ShopBrand"
+
+    ShopBrand:
+      type: object
+      required:
+        - capitalLetters
+        - count
+        - isShopFlag
+        - linkUrl
+        - shopBrandId
+      properties:
+        capitalLetters:
+          type: array
+          items:
+            type: string
+          example:
+            - A
+            - ア
+          description: ショップかブランドの頭文字
+        count:
+          type: integer
+          description: ショップかブランドの商品総数
+          example: 261
+        isShopFlag:
+          type: boolean
+          description: shopかbrandかどっちかを判定; trueならショップ; falseならブランド
+          example: true
+        linkUrl:
+          type: string
+          description: ショップかブランドページへのurl
+          example: https://search-voi.0101.co.jp/shop/adidas/?floor=sb_l_all
+        nameJp:
+          type: string
+          description: ショップかブランドの日本語名
+          example: アディダス
+        nameEn:
+          type: string
+          description: ショップかブランドの英語名
+          example: Adidas
+        shopBrandId:
+          type: string
+          description: ショップかブランドのID
+          example: adidas
+        rank:
+          type: integer
+          description: 人気順（１からの昇順）
+          example: 1
+
+    ### SearchTotalAPI
+    SearchTotalResponse:
+      type: object
+      required:
+        - total
+      properties:
+        total:
+          type: integer
+          description: 総商品件数
+          example: 1000
+
+    ### ProductDetailAPI
+    DetailProductList:
+      type: array
+      description: クーポン情報一覧
+      items:
+        $ref: "#/components/schemas/DetailProduct"
+
+    DetailProduct:
+      type: object
+      required:
+        - id
+        - flags
+        - fcd
+        - scd
+        - showPrice
+        - allBrands
+      description: |
+        アプリ用商品詳細ページのための情報。基本的にはマルイ様のAPIで取得するため、以下2点だけをこのAPIで取得
+        * fcd, scd一覧 : 画像検索のURL構築のため
+        * クーポン情報 : 各商品に紐づくクーポン情報を取得するため
+      properties:
+        id:
+          type: string
+          description: 商品のID
+          example: WW7786010101
+        detailUrl:
+          type: string
+          description: 商品詳細ページURL。パッケージが持つ絶対パスをそのまま渡す
+          example: https://voi.0101.co.jp/voi/webcatalog/showGoodsDetails.do?wrt=5&mcd=WW769&cpg=601&pno=11&ino=01
+        taxInclusivePrice:
+          type: integer
+          description: 税込価格
+          example: 2796
+        oldPrice:
+          type: integer
+          description: 二重価格表示用
+          example: 0
+        discountRate:
+          type: integer
+          description: 割引率(%)
+          example: 0
+        brandTextJP:
+          type: string
+          description: ブランド名称(日本語)
+          example: ヴェリココ/ラクチンきれいシューズ
+        brandTextEN:
+          type: string
+          description: ブランド名称(英語)
+          example: velikoko
+        flags:
+          $ref: "#/components/schemas/Flags"
+        productName1:
+          type: string
+          description: 商品の名前
+          example: 【19.5～27.0cm】2Wayファーパンプス（1.5cmヒール）
+        productName2:
+          type: string
+          description: 商品の属するブランドの日本語名+英語名(現状)
+          example: パープル＆イエロー（レディース）（Purple & Yellow）
+        imageURL:
+          type: string
+          description: メイン画像へのURL。パッケージが持つ絶対パスをそのまま渡す
+          example: https://voi.0101.co.jp/voi/webcatalog/img/ww777/601/ww777-60110-54a.jpg
+        commentCount:
+          type: integer
+          description: ユーザーコメント数、nullあり
+          example: 0
+        evaluationAverage:
+          type: number
+          format: float
+          description: ユーザー平均評価、0.0~5.0
+          example: 0.0
+        favoriteCount:
+          type: integer
+          description: お気に入り登録数、nullあり
+          example: 0
+        keywords:
+          type: array
+          description: 特徴情報
+          items:
+            type: string
+            example: G0001_A1423
+        shops:
+          type: array
+          description: ショップ
+          items:
+            type: string
+            example: aigle
+        bcd:
+          type: string
+          description: ブランドコード
+          example: "10799"
+        fcd:
+          type: array
+          description: 商品に紐付くfcdリスト（ない場合は空配列）
+          items:
+            type: string
+            example: 10000
+        scd:
+          type: array
+          description: 商品に紐付くscdリスト（ない場合は空配列）
+          items:
+            type: string
+            example: 11000
+        coupon:
+          type: array
+          description: 商品に紐付くクーポンのリスト（ない場合は空配列）
+          items:
+            $ref: "#/components/schemas/Coupon"
+        showPrice:
+          type: boolean
+          description: 商品価格を表示するかどうかのフラグ
+        allBrands:
+          type: array
+          description: サブブランドを含めて全ブランドのコード
+          items:
+            type: string
+          example:
+            - 30000
+            - 30030
+            - 30033
+        scdName:
+          type: string
+          description: アイテムカテゴリ名称 (t_item_code_text を返却)
+          example: "パンプス"
+        bulkDiscountMessage:
+          type: string
+          description: |
+            '''
+            まとめ割のメッセージ
+            下記いずれか該当する場合は null で返却
+            アイコンフラグ-まとめ割が1でない商品, まとめ割オフ率が0より大きい数でない商品, まとめ割引適用下限商品点数が1より大きい数でない商品
+            その他 "[適用下限商品点数]点以上で[オフ率]%OFF" の規則で生成し返却
+            '''
+          example: 2点以上で10%OFF
+        colorProducts:
+          type: array
+          description: |
+            '''
+            color_ball_flag=1指定時は value を返却する
+            それ以外は null を返却する
+            '''
+          items:
+            $ref: "#/components/schemas/colorProduct"
+
+    Coupon:
+      type: object
+      description: クーポンの情報
+      properties:
+        thumbnail:
+          type: string
+          description: クーポンのサムネイル
+          example: 1000円クーポン対象商品
+        thumbnailHtml:
+          type: string
+          description: クーポンのサムネイルのhtml tag
+          example: |
+            <div class="specialText" style="min-height: 55px;"><div class="specialTextDetail">1000円ｸｰﾎﾟﾝ対象商品 \n11/11(水)23:59まで</div></div>
+        text:
+          type: string
+          description: クーポンの説明
+          example: 1000円クーポン対象です。2/6(木)まで
+        textHtml:
+          type: string
+          description: クーポンの説明のhtml tag
+          example: |
+            <div id="mc_couponBnr_Area" style="margin:3px auto;font-size:12px;text-align:center;width:100%;display:block;background-color: #5ac2f3;-webkit-background-size:13px auto;-moz-background-size:13px auto;background-size:13px auto;padding:3px 0px 3px 0px;"><span class="mc_coupon_text" style="font-weight:bolder;color:#ffffff;">1000円クーポン対象商品です&nbsp;</span><span class="mc_coupon_expiration_date" style="font-weight:bolder;color:#ffffff;">11/11(水)まで&nbsp;</span><a class="mc_coupon_link" href="https://search-voi.0101.co.jp/voi/floor/brand_coupon_1108_4000_all/?allitem=on&amp;sortby=4&amp;price=4000_9999999" target="_blank" style="text-decoration:underline; color:#ffffff;">対象商品一覧&gt;&gt;</a></div>
+        url:
+          type: string
+          description: クーポンのテキストタップ時に遷移するURL
+          example: https://search-voi.0101.co.jp/sp/floor/brand_coupon_0203_3000_all/?allitem=on&sortby=4&price=3000_9999999
+
+    ### ProductDetailAPI
+    ColorVariationResponse:
+      type: array
+      description: カラーバリエーション一覧
+      items:
+        $ref: "#/components/schemas/ColorVariation"
+
+    ColorVariation:
+      type: object
+      required:
+        - productId
+        - colorVariationList
+      description: カラーバリエーション結果
+      properties:
+        productId:
+          type: string
+          description: 商品のID（型番単位）
+          example: WW7786010101
+        colorVariationList:
+          type: array
+          description: productId（型番単位）に紐づいてるカラー商品のリスト
+          items:
+            type: object
+            required:
+              - colorIdList
+            properties:
+              productId:
+                type: string
+                description: 商品のID（カラー単位）
+                example: WW7786010101102
+              imageUrl:
+                type: string
+                description: メイン画像へのURL。パッケージが持つ絶対パスをそのまま渡す
+                example: https://voi.0101.co.jp/voi/webcatalog/img/ww777/601/ww777-60110-54a.jpg
+              colorIdList:
+                type: array
+                description: カラーID配列
+                items:
+                  type: string
+                  description: カラーID
+                  example: blue
+
+    Error:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: バリデーションエラーが発生しました
+        validationInfos:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationInfo"
+
+    ValidationInfo:
+      type: object
+      required:
+        - field
+        - rejectedValue
+        - message
+      properties:
+        field:
+          type: string
+          example: name
+        rejectedValue:
+          type: string
+          example: Null Value
+        message:
+          type: string
+          example: name must not be null or empty.
+
+  parameters:
+    FactorParam:
+      in: query
+      name: factor
+      required: true
+      description: |
+        ベースとなる検索、factor毎の必須パラメータは以下の通り
+        * **item**: `fcd` または `scd` 必須 (itemcategoryで使用する場合`fcd`が必須; `fcd`の有無で`fcd`又は`scd`一覧を返すか判断するため）
+        * **brand**: `bcd` 必須
+        * **floor**: `floor` 必須
+        * **new**: なし
+        * **sale**: なし
+        * **shop**: `shop` 必須
+        * **webshop**: `wno` 必須
+        * **freeword**: `q` 必須
+      example: item
+      schema:
+        type: string
+
+    StoreParam:
+      in: query
+      name: store
+      required: false
+      description: |
+        fcdの大分類(store > fcd > scd)。\
+        ※ **以下の数値は一例であり，連携されるデータによって変わることがあります。**
+        * `1`: ファッション
+        * `2`: キッズ
+        * `3`: コスメ
+        * `4`: スポーツ
+        * `5`: スイーツ
+        * `6`: インテリア
+        * `7`: 生活雑貨
+        * `8`: 電化製品
+        * `9`: おもちゃ・ゲーム・ホビー
+        * `10`: 書籍・音楽映像ソフト
+        * `11`: アニメ・キャラクター系グッズ
+        カンマ区切りで複数選択可能
+      example: "1"
+      schema:
+        type: string
+
+    FigureParam:
+      in: query
+      name: figure
+      required: false
+      description: |
+        性別（male, femaleなど）\
+        ※ **以下の数値は一例であり，連携されるデータによって変わることがあります。**
+        * `1`: レディース
+        * `2`: メンズ
+        * `3`: ガール
+        * `4`: ボーイ
+        * `5`: ホーム
+        カンマ区切りで複数選択可能
+      example: "1"
+      schema:
+        type: string
+
+    BrandParam:
+      in: query
+      name: bcd
+      required: false
+      description: |
+        ブランドコード \
+        カンマ区切りで複数指定可能
+      example: 10799
+      schema:
+        type: string
+
+    FirstItemParam:
+      in: query
+      name: fcd
+      required: false
+      description: |
+        第1カテゴリコード \
+        カンマ区切りで複数指定可能
+      example: 10000
+      schema:
+        type: string
+
+    SecondItemParam:
+      in: query
+      name: scd
+      required: false
+      description: |
+        第2カテゴリコード \
+        カンマ区切りで複数指定可能
+      example: 10004
+      schema:
+        type: string
+
+    ShopParam:
+      in: query
+      name: shop
+      required: false
+      description: ショップ; wnoとの違い実店舗が記入
+      example: oimodel
+      schema:
+        type: string
+
+    WebShopParam:
+      in: query
+      name: wno
+      required: false
+      description: |
+        ウェブショップコード \
+        カンマ区切りで複数指定可能
+      example: 10263
+      schema:
+        type: string
+
+    FreewordParam:
+      in: query
+      name: q
+      required: false
+      description: |
+        ユーザー入力による検索 \
+        +区切りで複数指定可能
+      example: カバン+メンズ
+      schema:
+        type: string
+
+    AdditionalWordParam:
+      in: query
+      name: adw
+      required: false
+      description: |
+        絞り込みUI内のキーワード検索 \
+        +区切りで複数指定可能
+      example: カバン
+      schema:
+        type: string
+
+    ExcludingWordParam:
+      in: query
+      name: exq
+      required: false
+      description: |
+        除外キーワード検索 \
+        +区切りで複数指定可能
+      example: トート
+      schema:
+        type: string
+
+    FloorParam:
+      in: query
+      name: floor
+      required: false
+      description: |
+        フロア(カテゴリの集合体) \
+        カンマ区切りで複数指定可能
+      example: "sb_l_all"
+      schema:
+        type: string
+
+    NewDateParam:
+      in: query
+      name: new_date
+      required: false
+      description: |
+        新着(入荷)日。最大2週間の範囲内が選択可能\
+        フォーマット：開始_終了　(yyyymmdd_yyyymmdd)\
+        カンマ区切りで複数指定可能
+      example: "20200213_20200226"
+      schema:
+        type: string
+
+    SaleDateParam:
+      in: query
+      name: sale_date
+      required: false
+      description: |
+        セール日。最大2週間の範囲内が選択可能\
+        フォーマット：　開始_終了(yyyymmdd_yyyymmdd)\
+        カンマ区切りで複数指定可能
+      example: "20200213_20200226"
+      schema:
+        type: string
+
+    SizeParam:
+      in: query
+      name: size
+      required: false
+      description: |
+        サイズコード\
+        カンマ区切りで複数指定可能
+      example: 40005
+      schema:
+        type: string
+
+    KeywordParam:
+      in: query
+      name: kwd
+      required: false
+      description: |
+        特徴コード\
+        group(G+数字4桁)_kwd(A+数字4桁)\
+        カンマ区切りで複数指定可能
+      example: "G0007_A0224"
+      schema:
+        type: string
+
+    OffrateParam:
+      in: query
+      name: offrate
+      required: false
+      description: オフ率; 40であれば40%以上のものを返す, 1つまで
+      example: 40
+      schema:
+        type: string
+
+    ColorParam:
+      in: query
+      name: color
+      required: false
+      description: |
+        カラー\
+        カンマ区切りで複数指定可能
+      example: black
+      schema:
+        type: string
+
+    PriceParam:
+      in: query
+      name: price
+      required: false
+      description: 下限価格_上限価格; 1つまで
+      example: "0_10000"
+      schema:
+        type: string
+
+    FullColorParam:
+      in: query
+      name: full
+      required: false
+      description: |
+        * 0：代表色　（同じ商品のとき、代表色のみ表示)
+        * 1：カラー展開 (同じ商品でも全色、結果に表示）\
+        1つまで
+      example: "1"
+      schema:
+        type: string
+        default: 1
+
+    DispDreniParam:
+      in: query
+      name: display_dreni
+      required: false
+      description: |
+        0 または 1 のみ受け付ける
+        * 0: s_web_brand_code=31192 (ドレニ) 商品を返却対象にしない
+        * 1: s_web_brand_code=31192 (ドレニ) 商品を返却対象にする
+      example: 1
+      schema:
+        type: integer
+        default: 0
+
+    SortParam:
+      in: query
+      name: sortby
+      required: false
+      description: |
+        表示順指定; 1つまで
+        * `0` **新着順**:\
+              再入荷日（rearrival_date）の降順在庫ありフラグの降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順\
+              factor=shopのときはあなたへのおススメ順になります
+        * `1` **安い順**:\
+              価格の昇順在庫ありフラグの降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `2` **高い順**:\
+              価格の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `4` **アクセス数順**:\
+              アクセス数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `5` **キーワードと関連度が高い順**:\
+              検索キーワードに対する関連度の降順在庫ありフラグの降順購買数の降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `6` **お客さまコメントの多い順**:\
+              コメント数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `7` **お客さま評価の高い順**:\
+              評価平均の降順在庫ありフラグの降順コメント数の降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `8` **お気に入り登録の多い順**:\
+              お気に入り登録数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `14` **オフ率の高い順**:\
+              オフ率の降順在庫ありフラグのありアクセス数の降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `15` **人気順**:\
+              在庫ありフラグの降順アクセス数の降順アイテム大分類IDの昇順アイテム小分類IDの昇順
+              商品型番の昇順
+        * `16` **あなたへのおすすめ商品順**:\
+              在庫ありフラグの降順アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順\
+              ユーザの行動履歴（閲覧、購買等）に近いアイテムを検索結果で優先（表示順位を上昇）
+              させる機能なので、専用のソート軸はなし
+        * `17` **売れている順**:\
+              購買数
+        * `18` **入金額の高い順**:\
+              総売り上げ
+              金額*購買数
+        * `19` **まとめ割オフ率の高い順**:\
+              まとめ割オフ率の降順, 在庫ありフラグの降順, アクセス数の降順,\
+              再入荷日（rearrival_date）の降順, アイテム大分類IDの昇順,\
+              アイテム小分類IDの昇順, 商品型番の昇順
+      example: 0
+      schema:
+        type: string
+
+    ArrivalParam:
+      in: query
+      name: arrival
+      required: false
+      description: |
+        * `1`: 新着
+        * `2`: 再入荷\
+        カンマ区切りで複数指定可能
+      example: 1
+      schema:
+        type: string
+
+    SaleParam:
+      in: query
+      name: sale
+      required: false
+      description: |
+        * `1`: セール
+        * `2`: 再値下げ
+        * `3`: 通常\
+        カンマ区切りで複数指定可能
+      example: "1"
+      schema:
+        type: string
+
+    GiftParam:
+      in: query
+      name: gift
+      required: false
+      description: 無料ギフトサービス対象(0:off, 1:on); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    LimitedSaleParam:
+      in: query
+      name: ls
+      required: false
+      description: 期間限定セール対象(0:off, 1:on); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    SalesPromotionParam:
+      in: query
+      name: sp
+      required: false
+      description: 販促キャンペーンフラグ(0:off, 1:on); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    ShipFreeParam:
+      in: query
+      name: sf
+      required: false
+      description: 配送料無料対象(0:off, 1:on); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    PreOrderParam:
+      in: query
+      name: rsrv
+      required: false
+      description: 先行予約対象(0:off, 1:on); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    UsedParam:
+      in: query
+      name: used
+      required: false
+      description: 新品(0) / 中古(1); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    CouponParam:
+      in: query
+      name: coupon
+      required: false
+      description: クーポン なし(0) / あり(1); 1つまで
+      example: "0"
+      schema:
+        type: string
+
+    PageParam:
+      in: query
+      name: page
+      required: false
+      description: ページ番号指定; 1つまで
+      example: 1
+      schema:
+        type: integer
+        default: 1
+
+    PerParam:
+      in: query
+      name: per
+      required: false
+      description: ページあたり商品件数 (search)
+      example: 60
+      schema:
+        type: integer
+        default: 60
+
+    SizeDetailParam:
+      in: query
+      name: sd
+      required: false
+      description: |
+        こだわりサイズ。\
+        フォーマット：(region_id)_min_max\
+        各項目につき1つまで\
+        カンマ区切りで複数指定可能(AND検索)
+      example: 008_0_100
+      schema:
+        type: string
+
+    ForceFreeword:
+      in: query
+      name: forceFreeword
+      required: false
+      description: 強制的にフリーワード検索を行い、リダイレクト機能を使わない(0:off, 1:on); 1つまで
+      example: "0"
+      schema:
+        type: string
+        default: 0
+
+    BulkDiscountParam:
+      in: query
+      name: bulkdiscount
+      required: false
+      description: まとめ割 非対象(0) / 対象(1); 1つまで
+      example: "1"
+      schema:
+        type: string
+
+    #suggestAPI用parm
+    WordParam:
+      in: query
+      name: word
+      required: true
+      description: サジェスト元ワード; 1つまで
+      example: ナ
+      schema:
+        type: string
+
+    #### ショップブランドパラメータ ####
+    GetBrandParam:
+      in: query
+      name: getbrand
+      required: false
+      description: |
+        * `1`: レスポンスにブランドを含める
+        * `0`: レスポンスにブランドを含めない
+      example: "0"
+      schema:
+        type: string
+        default: "1"
+
+    GetShopParam:
+      in: query
+      name: getshop
+      required: false
+      description: |
+        * `1`: レスポンスにショップを含める
+        * `0`: レスポンスにショップを含めない
+      example: "0"
+      schema:
+        type: string
+        default: "1"
+
+    RentalBrandParam:
+      in: query
+      name: rentalbrand
+      required: false
+      description: |
+        デフォルトではレンタルブランド(ドレニ)はレスポンスに含まない。
+        * `1`: レスポンスにレンタルブランド・ショップ(ドレニ)を含める
+        * `0`: レスポンスにレンタルブランド・ショップ(ドレニ)を含めない
+      example: "0"
+      schema:
+        type: string
+        default: "0"
+
+    SecretSaleParam:
+      in: query
+      name: scrtsl
+      required: false
+      description: |
+        `factor=floor` の状態だけでこのパラメータが効果ある
+        * `0`: シークレットセールではない商品のみで検索する
+        * `1`: シークレットセールの商品のみで検索する
+      example: "0"
+      schema:
+        type: string
+        default: "0"
+
+    FirstLetterParam:
+      in: query
+      name: firstletter
+      required: false
+      description: |
+        指定した頭文字で絞り込む。対応する値はカタカナ・英文字・0 の中の１文字まで。\
+        数字か記号の頭文字を指定する際は `0` を指定する。\
+        英文字が大文字か小文字どっちらでも指定できるけど区別しない。
+      examples:
+        kana:
+          value: "ア"
+        romman:
+          value: "A"
+        number:
+          value: "0"
+      schema:
+        type: string
+
+    #### トレンドワードパラメータ ####
+    TrendwordCountParam:
+      in: query
+      name: count
+      required: false
+      description: 取得する件数
+      example: 5
+      schema:
+        type: integer
+        default: 10
+    TrendwordOffsetParam:
+      in: query
+      name: offset
+      required: false
+      description: 取得開始位置
+      example: 5
+      schema:
+        type: integer
+        default: 0
+    TrendwordPeriodParam:
+      in: query
+      name: period
+      required: false
+      description: |
+        集計期間
+        * `1`: 1日
+        * `7`: 7日
+        * `30` 30日
+      example: 30
+      schema:
+        type: integer
+        default: 7
+    TrendwordSortParam:
+      in: query
+      name: sort
+      required: false
+      description: アクセス順に対するソート順です。`desc` (降順)か `asc` (昇順)指定できます。
+      example: desc
+      schema:
+        type: string
+        default: desc
+
+    #### ランキングパラメータ一部 ####
+    CountParam:
+      in: query
+      name: count
+      required: false
+      description: 取得件数(何位まで取得するか); 最大50件
+      example: 30
+      schema:
+        type: string
+        default: 30
+
+    RankingSortParam:
+      in: query
+      name: sortby
+      required: false
+      description: |
+        表示順指定; 1つまで\
+        typeによる対応するsortが変わるので以下の資料参考\
+        https://docs.google.com/spreadsheets/d/1-_PW55j8qYwimwdL6D1dIgxDG1whntnATE09fihRVrI/edit#gid=0
+        * `0` **新着順**:\
+              再入荷日（rearrival_date）の降順在庫ありフラグの降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `1` **安い順**:\
+              価格の昇順在庫ありフラグの降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `2` **高い順**:\
+              価格の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `4` **アクセス数順**:\
+              アクセス数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `6` **お客さまコメントの多い順**:\
+              コメント数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `7` **お客さま評価の高い順**:\
+              評価平均の降順在庫ありフラグの降順コメント数の降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `8` **お気に入り登録の多い順**:\
+              お気に入り登録数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順\
+              ※ `brand`、`shop`の場合はカスタムお気に入り登録数
+        * `14` **オフ率の高い順**:\
+              オフ率の降順オフステータスフラグ昇順在庫ありフラグの降順アクセス数の降順再入荷日（rearrival_date）の降順
+              アイテム大分類IDの昇順アイテム小分類IDの昇順商品型番の昇順
+        * `15` **人気順**:\
+              閲覧数の降順
+        * `17` **売れている順**:\
+              購買数の降順
+        * `18` **購入金額の高い順**:\
+              総売り上げ
+              金額*購買数
+      example: "0"
+      schema:
+        type: string
+        default: 17
+
+    PeriodParam:
+      in: query
+      name: period
+      required: false
+      description: |
+        集計期間
+        * `1`: 1日
+        * `7`: 7日
+        * `30` 30日\
+        ※ `sortby` が `4` `8` `15` `17` `18` のどれかの場合以外このパラメータは効果ありません\
+        ※ `sortby` が `8` の場合は `type` が `brand`、`shop` 以外は効果なし
+      example: 1
+      schema:
+        type: string
+        default: 1
+
+    TypeParam:
+      in: query
+      name: type
+      required: false
+      description: |
+        返却粒度
+        * `item`: fcdが指定されていなかったら「第１カテゴリ」、fcdが指定されていたらその第１カテゴリに紐づく「第２カテゴリ」
+        * `brand`: ブランド
+        * `shop`: ショップ
+        * `product`: 型番
+        * `color`: 型番+カラー
+      example: item
+      schema:
+        type: string
+        default: product
+
+    GroupParam:
+      in: query
+      name: group
+      required: false
+      description: |
+        グループ機能を有効とするか \
+        * `0`: off
+        * `1`: on （onの場合は`type`は`product`, `color`のいずれかであることが条件）
+      example: 0
+      schema:
+        type: string
+        default: 0
+
+    GroupSortParam:
+      in: query
+      name: groupsort
+      required: false
+      description: |
+        GroupParam:1の時使用可能
+        表示順:
+        * `4` **アクセス数順**:\
+              アクセス数の降順在庫ありフラグの降順再入荷日（rearrival_date）の降順アイテム大分類IDの昇順
+              アイテム小分類IDの昇順商品型番の昇順
+        * `15` **人気順**:\
+              閲覧数
+        * `17` **売れている順**:\
+              購買数
+        * `18` **入金額の高い順**:\
+              総売り上げ
+              金額*購買数
+      example: 18
+      schema:
+        type: string
+        default: 15
+
+    GroupTypeParam:
+      in: query
+      name: grouptype
+      required: false
+      description: |
+        GroupParam:1の時使用可能
+        グループの返却粒度
+        * `item`: カテゴリ
+        * `brand`: ブランド
+        * `shop`: ショップ \
+        このパラメータを指定すると `type` が `product` `color` しか使えない
+      example: brand
+      schema:
+        type: string
+        default: brand
+
+    GroupCountParam:
+      in: query
+      name: groupcount
+      required: false
+      description: グループごとに取得する件数 (何位まで取得するか); GroupParam:1の時使用可能, 最大5件まで
+      example: 1
+      schema:
+        type: string
+        default: 5
+
+    ### ProductDetailAPI param
+    ProductIdParam:
+      in: query
+      name: productid
+      required: false
+      description: 商品型番, カンマ区切りで複数指定可能
+      example: "WW4312111701"
+      schema:
+        type: string
+
+    ColorBallParam:
+      in: query
+      name: color_ball_flag
+      required: false
+      description: |
+        0 または 1 のみ受け付ける
+        * 0: 色玉情報を返却しない
+        * 1: 色玉情報を返却する
+      example: 1
+      schema:
+        type: integer
+        default: 0
